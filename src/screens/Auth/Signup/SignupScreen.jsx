@@ -1,11 +1,13 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Button } from 'react-native';
 import styles from './signup.style.js';
+import { StatusBar } from 'react-native';
 
-const SignupScreen = () => {
+const SignupScreen = ({ navigation }) => {
   return (
-    <View>
+    <View style={{ marginTop: StatusBar.currentHeight }}>
       <Text style={styles.signupText}>This is signup screen</Text>
+      <Button title="Login" onPress={() => navigation.goBack()} />
     </View>
   );
 };

@@ -1,5 +1,4 @@
 import React from 'react';
-import { StyleSheet, StatusBar, View, Text, SafeAreaView } from 'react-native';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -16,14 +15,5 @@ export default RootComponent = () => {
         <Stack.Screen name="app" component={MainAppNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
-    // <SafeAreaView style={styles.container}>
-    //   <Text>This is Root Component</Text>
-    // </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: StatusBar.currentHeight,
-  },
-});
