@@ -41,7 +41,7 @@ const StackFromHomeTag = () => {
       }}
     >
       <Stack.Screen name="Home" component={HomeScreen} options={{ headerLeft: () => <></>, title: 'Trang chủ' }} />
-      <Stack.Screen name="SpendSchedule" component={SpendScheduleScreen} options={{ title: 'Kế hoạch chi tiêu' }} />
+      <Stack.Screen name="SpendSchedule" component={SpendScheduleScreen} options={{ title: 'Lập kế hoạch chi tiêu' }} />
       <Stack.Screen name="ScheduleDetail" component={ScheduleDetailScreen} options={{ title: 'Chi tiết kế hoạch' }} />
     </Stack.Navigator>
   );
