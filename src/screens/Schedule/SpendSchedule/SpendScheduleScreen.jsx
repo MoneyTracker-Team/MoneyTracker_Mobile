@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Modal } from 'react-native';
 import styles from './spendSchedule.styles.js';
 import SpendDetail from '../../../components/common/SpendDetail/SpendDetail.component.js';
@@ -7,6 +7,13 @@ import theme from '../../../config/theme.js';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const SpendScheduleScreen = ({ navigation }) => {
+  useEffect(() => {
+    navigation.getParent().setOptions({ tabBarStyle: { display: 'none' } });
+    return () => {
+      navigation.getParent().setOptions({ tabBarStyle: { display: 'flex' } });
+    };
+  }, []);
+
   const [modalAddMoney, setModalAddMoney] = useState(false);
   const [modalSubMoney, setModalSubMoney] = useState(false);
 
@@ -54,7 +61,7 @@ const SpendScheduleScreen = ({ navigation }) => {
           style={styles.create_spend_schedule_button}
           onPress={() => navigation.navigate('ScheduleDetail')}
         >
-          <Text style={styles.create_spend_schedule_text}>Tạo kế hoạch chi tiêu</Text>
+          <Text style={styles.create_spend_schedule_text}>Xem kế hoạch chi tiêu</Text>
         </TouchableOpacity>
       </View>
       <Modal transparent={true} visible={modalAddMoney} animationType="fade">

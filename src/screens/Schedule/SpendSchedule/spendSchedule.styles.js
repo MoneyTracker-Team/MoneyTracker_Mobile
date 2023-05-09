@@ -65,7 +65,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingVertical: 30,
+    alignItems: 'center',
+    paddingVertical: 40,
     marginTop: 20,
   },
   select_month_text: {
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
   },
   create_spend_schedule_container: {
-    marginTop: 26,
+    marginTop: 36,
     alignItems: 'center',
   },
   create_spend_schedule_button: {
