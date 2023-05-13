@@ -13,7 +13,16 @@ import ScheduleDetailScreen from '../screens/Schedule/ScheduleDetail';
 import Calendar from '../screens/SpendHistory/Calendar';
 
 import StatisticScreen from '../screens/Statistic/StatisticPie';
+
 import AccountSettingScreen from '../screens/AccountSetting';
+import PersonalAccountScreen from '../screens/AccountSetting/PersonalAccount';
+import ChangePasswordScreen from '../screens/AccountSetting/ChangePassword';
+import ExpenseCategoriesScreen from '../screens/AccountSetting/ExpenseCategories';
+import FriendsListScreen from '../screens/AccountSetting/FriendsList';
+import LoansScreen from '../screens/AccountSetting/Loans';
+import SavingsScreen from '../screens/AccountSetting/Savings';
+import AboutScreen from '../screens/AccountSetting/About';
+import EditCategoryScreen from '../screens/AccountSetting/ExpenseCategories/EditCategory';
 
 const Stack = createStackNavigator();
 
@@ -97,6 +106,14 @@ const StackFromAccountTag = () => {
       }}
     >
       <Stack.Screen name="AccountSetting" component={AccountSettingScreen} options={{ headerLeft: () => <></> }} />
+      <Stack.Screen name="PersonalAccount" component={PersonalAccountScreen} />
+      <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
+      <Stack.Screen name="ExpenseCategories" component={ExpenseCategoriesScreen} />
+      <Stack.Screen name="FriendsList" component={FriendsListScreen} />
+      <Stack.Screen name="Loans" component={LoansScreen} />
+      <Stack.Screen name="Savings" component={SavingsScreen} />
+      <Stack.Screen name="About" component={AboutScreen} />
+      <Stack.Screen name="EditCategoryScreen" component={EditCategoryScreen} />
     </Stack.Navigator>
   );
 };
