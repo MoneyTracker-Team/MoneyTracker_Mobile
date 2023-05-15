@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, SafeAreaView, FlatList, Modal, TextInput, Keyboard } from 'react-native';
+import React from 'react';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styles from './ScreenTab.style.js';
 
 function ScreenTab({ listTab, status, setStatusFilter }) {

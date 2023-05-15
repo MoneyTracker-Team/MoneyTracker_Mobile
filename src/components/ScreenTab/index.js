@@ -1,1 +1,1 @@
-export { default } from './ScreenTab.jsx';
+export { default } from './ScreenTab';

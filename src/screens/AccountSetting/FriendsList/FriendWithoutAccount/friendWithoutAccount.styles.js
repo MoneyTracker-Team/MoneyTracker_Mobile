@@ -1,0 +1,120 @@
+import { Dimensions, StyleSheet } from 'react-native';
+import theme from '../../../../config/theme';
+const imageHeight = Dimensions.get('window').width * 0.12;
+const styles = StyleSheet.create({
+  frienddata: {
+    backgroundColor: '#000',
+    display: 'flex',
+    flexDirection: 'row',
+    marginVertical: '2%',
+    marginHorizontal: '8%',
+    height: imageHeight,
+  },
+  friendName: {
+    flex: 1,
+    color: theme.colors.white,
+    fontSize: theme.fontSizes.text_body,
+    fontWeight: 400,
+    marginVertical: '3%',
+    marginStart: '8%',
+  },
+  edit_button: {
+    margin: '1%',
+    marginEnd: '4%',
+  },
+  delete_button: {
+    margin: '1%',
+  },
+  delete_icon: {
+    padding: 10,
+    backgroundColor: '#29322e',
+    borderRadius: 14,
+  },
+  modalView: {
+    width: '100%',
+    height: 380,
+    position: 'absolute',
+    bottom: -Dimensions.get('window').height,
+    left: 0,
+    right: 0,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    elevation: 5,
+  },
+  modalViewTop: {
+    width: '100%',
+    height: 380,
+    marginVertical: 10,
+    position: 'absolute',
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 35,
+    elevation: 5,
+  },
+  closeModal: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+  },
+  modalLabel: {
+    fontSize: theme.fontSizes.text_body,
+    fontWeight: 500,
+  },
+  modalInput: {
+    height: 50,
+    backgroundColor: '#e5e5e5',
+    borderRadius: 15,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    marginTop: 5,
+  },
+  action: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+  },
+  btnDelete: {
+    backgroundColor: theme.colors.danger,
+    width: '40%',
+    height: 60,
+    marginHorizontal: '8%',
+    marginTop: '30%',
+    padding: 10,
+    borderRadius: 10,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  btnSave: {
+    backgroundColor: theme.colors.white,
+    borderColor: theme.colors.quaternary,
+    borderWidth: 1,
+    width: '40%',
+    marginHorizontal: '8%',
+    marginTop: '30%',
+    height: 60,
+    borderRadius: 10,
+    padding: 10,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textSave: {
+    color: theme.colors.quaternary,
+    fontWeight: 400,
+    fontSize: theme.fontSizes.text_body,
+  },
+  textDelete: {
+    color: theme.colors.white,
+    fontWeight: 400,
+    fontSize: theme.fontSizes.text_body,
+  },
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+});
+
+export default styles;

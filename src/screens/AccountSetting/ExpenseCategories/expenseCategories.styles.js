@@ -76,14 +76,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#29322e',
     borderRadius: 14,
   },
-  // modalContainer: {
-  //   position: 'absolute',
-  //   bottom: 0,
-  //   left: 0,
-  //   right: 0,
-  //   width: '100%',
-  //   height: '60%',
-  // },
   modalView: {
     width: '100%',
     height: 420,
@@ -123,10 +115,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 20,
     marginTop: 5,
-  },
-  modalInputFocused: {
-    borderWidth: 1,
-    borderColor: theme.colors.quaternary,
   },
   btnSaveCategory: {
     backgroundColor: theme.colors.quaternary,
