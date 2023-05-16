@@ -60,7 +60,7 @@ const StackFromSpendHistoryTag = () => {
         ),
       }}
     >
-      <Stack.Screen name="HistoryCalendar" component={Calendar} options={{ headerLeft: () => <></> }} />
+      <Stack.Screen name="Chi tiêu trong tháng" component={Calendar} options={{ headerLeft: () => <></> }} />
     </Stack.Navigator>
   );
 };
