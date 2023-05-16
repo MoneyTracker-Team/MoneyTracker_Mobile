@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styles from './accountSetting.styles.js';
 import Ionicons from 'react-native-vector-icons/Ionicons.js';
+import account from '../../static/account.js';
 const AccountSettingScreen = ({ navigation }) => {
   const handlePressPersonalAccount = () => {
     navigation.navigate('PersonalAccount'); // chuyển đến màn hình Tài khoản cá nhân
@@ -27,7 +28,7 @@ const AccountSettingScreen = ({ navigation }) => {
   };
 
   const handlePressAbout = () => {
-    navigation.navigate('About'); // chuyển đến màn hình Thông tin về ứng dụng React Native
+    navigation.navigate('About'); // chuyển đến màn hình Thông tin về ứng dụng
   };
   return (
     <View style={styles.wrapper}>
@@ -36,10 +37,10 @@ const AccountSettingScreen = ({ navigation }) => {
         <Image
           style={styles.image}
           source={{
-            uri: 'https://i.pinimg.com/originals/2b/0f/7a/2b0f7a9533237b7e9b49f62ba73b95dc.jpg',
+            uri: account[5].avatar,
           }}
         />
-        <Text style={styles.fullname}>Trần Duy Khôi</Text>
+        <Text style={styles.fullname}>{account[5].name}</Text>
         <Text style={styles.money}>2.000.000 vnđ</Text>
       </View>
       <View style={styles.list_action}>
@@ -81,7 +82,7 @@ const AccountSettingScreen = ({ navigation }) => {
         <TouchableOpacity style={styles.actionBtn} onPress={handlePressSavings}>
           <View style={styles.action}>
             <Ionicons style={styles.action_icon} name="logo-bitcoin" size={24} />
-            <Text style={styles.action_title}>Chỉnh sửa tiền tiết kiệm</Text>
+            <Text style={styles.action_title}>Chỉnh sửa tiết kiệm</Text>
             <Ionicons style={styles.next_icon} name="chevron-forward-outline" size={24} />
           </View>
         </TouchableOpacity>

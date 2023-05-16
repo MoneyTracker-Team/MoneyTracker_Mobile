@@ -6,7 +6,6 @@ import ScreenTab from '../../../components/ScreenTab/ScreenTab.component.js';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import theme from '../../../config/theme';
-// import EditCategoryScreen from './EditCategory';
 import Ionicons from 'react-native-vector-icons/Ionicons.js';
 function ExpenseCategoriesScreen({ navigation }) {
   useEffect(() => {
