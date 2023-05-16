@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Modal } from 'react-native';
 import styles from './spendSchedule.styles.js';
 import SpendDetail from '../../../components/common/SpendDetail/SpendDetail.component.js';
 import EnterMoney from '../../../components/common/EnterMoney/EnterMoney.component.js';
+import DisplayMoney from '../../../components/common/DisplayMoney/DisplayMoney.component.js';
 import theme from '../../../config/theme.js';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -22,7 +23,7 @@ const SpendScheduleScreen = ({ navigation }) => {
       <View style={styles.money_amount_container}>
         <Text style={styles.normal_text}>Số tiền dự định tháng này:</Text>
         <View style={styles.money_container}>
-          <Text style={styles.money_text}>2,000,000 vnđ</Text>
+          <DisplayMoney moneyAmount="2,000,000" />
         </View>
         <View style={styles.button_container}>
           <TouchableOpacity style={styles.add_button} onPress={() => setModalAddMoney(true)}>
