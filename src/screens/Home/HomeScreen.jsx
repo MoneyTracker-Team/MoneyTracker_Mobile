@@ -6,6 +6,7 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View>
       <Text style={styles.example}>This is Home Screen</Text>
+      <Button title="Chi tiền" onPress={() => navigation.navigate('CreateSpending')} />
       <Button title="Tạo kế hoạch chi tiêu" onPress={() => navigation.navigate('SpendSchedule')} />
     </View>
   );
