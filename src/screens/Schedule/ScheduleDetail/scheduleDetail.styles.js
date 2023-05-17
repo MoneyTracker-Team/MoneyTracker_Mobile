@@ -7,8 +7,8 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.black,
   },
   overview_container: {
-    marginTop: 24,
-    marginLeft: 24,
+    marginTop: '4%',
+    marginLeft: '6%',
   },
   overview_title_text: {
     color: 'rgba(255, 255, 255, 0.7)',
