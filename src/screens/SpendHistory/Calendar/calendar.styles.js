@@ -2,6 +2,7 @@ import { StyleSheet } from 'react-native';
 import theme from '../../../config/theme';
 
 const ThemeColor = theme.colors;
+const ThemFontSize = theme.fontSizes;
 
 const styles = StyleSheet.create({
   // CALENDAR
@@ -104,6 +105,59 @@ const styles = StyleSheet.create({
   },
 
   // STATISTIC
+  statisticContainer: {
+    marginTop: 30,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+
+  statisticWrap: {
+    backgroundColor: 'white',
+    width: '90%',
+    height: 200,
+    borderRadius: 10,
+    padding: 10,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+  },
+
+  statisticItem: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '50%',
+    height: '50%',
+    flexDirection: 'column',
+    gap: 4,
+    borderRadius: 20,
+  },
+
+  statisticItemPressable: {
+    backgroundColor: ThemeColor.tertiary,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+  },
+
+  itemlargeTextPressable: {
+    color: 'white',
+  },
+
+  itemlargeText: {
+    fontSize: ThemFontSize.headline_two,
+    fontWeight: '600',
+  },
+
+  itemSmallText: {},
 
   example: {
     color: '#fff',

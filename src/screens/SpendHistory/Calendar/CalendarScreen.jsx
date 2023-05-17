@@ -71,12 +71,16 @@ function CalendarScreen() {
     for (let i = 1; i <= lastDateOfMonth; i++) {
       let isToday = checkToDay(i, currMonth, currYear);
       dateOfCalendars.push(
-        <View key={'currentdateofmonth' + i} style={[styles.calendarItemWrap, isToday ? styles.todayItemWrap : '']}>
+        <TouchableOpacity
+          onPress={() => handleShowSpendInDate(i)}
+          key={'currentdateofmonth' + i}
+          style={[styles.calendarItemWrap, isToday ? styles.todayItemWrap : '']}
+        >
           <Text style={styles.calendarItemText}>{i}</Text>
           <View style={[styles.quantitySpendWrap, isToday ? styles.bgGreen : '']}>
             <Text style={styles.quantitySpendText}>4</Text>
           </View>
-        </View>,
+        </TouchableOpacity>,
       );
     }
     // date of next month
@@ -90,6 +94,14 @@ function CalendarScreen() {
       }
     }
     return dateOfCalendars;
+  };
+
+  const handleShowSpendInDate = (date) => {
+    // handle show spend in pick date
+  };
+
+  const handleViewSpendMonthly = () => {
+    // handle show spend monthly here
   };
 
   return (
@@ -125,7 +137,34 @@ function CalendarScreen() {
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.example}>This is Calendar Screen</Text>
+        {/* STATISTIC */}
+        <View style={styles.statisticContainer}>
+          <View style={styles.statisticWrap}>
+            {/* Grid Item */}
+            <View style={styles.statisticItem}>
+              <Text style={styles.itemlargeText}>1.235K</Text>
+              <Text style={styles.itemSmallText}>Tổng tiền đã chi tiêu</Text>
+            </View>
+
+            <TouchableOpacity
+              style={[styles.statisticItem, styles.statisticItemPressable]}
+              onPress={handleViewSpendMonthly}
+            >
+              <Text style={[styles.itemlargeText, styles.itemlargeTextPressable]}>635K</Text>
+              <Text style={[styles.itemSmallText, styles.itemlargeTextPressable]}>Các khoản cố định</Text>
+            </TouchableOpacity>
+
+            <View style={styles.statisticItem}>
+              <Text style={styles.itemlargeText}>450K</Text>
+              <Text style={styles.itemSmallText}>Ngày tiêu nhiều nhất</Text>
+            </View>
+
+            <View style={styles.statisticItem}>
+              <Text style={styles.itemlargeText}>45K</Text>
+              <Text style={styles.itemSmallText}>Ngày tiêu ít nhất</Text>
+            </View>
+          </View>
+        </View>
       </View>
     </ImageBackground>
   );
