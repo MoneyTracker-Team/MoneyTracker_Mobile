@@ -122,6 +122,16 @@ const styles = StyleSheet.create({
   btn_more_category_icon: {
     color: theme.colors.white,
   },
+  chosen_image_container: {
+    height: 270,
+    width: '89%',
+    marginTop: '3%',
+  },
+  chosen_image: {
+    height: '100%',
+    width: '100%',
+    borderRadius: 20,
+  },
   modal_background: {
     flex: 1,
     backgroundColor: 'rgba(54, 54, 54, 0.75)',
@@ -357,6 +367,41 @@ const styles = StyleSheet.create({
     height: 370,
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
+  },
+  camera_container: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  camera: {
+    flex: 1,
+  },
+  button_camera_container: {
+    flex: 1,
+    backgroundColor: 'transparent',
+    marginTop: '7%',
+    justifyContent: 'space-between',
+  },
+  button_close_camera: {
+    alignSelf: 'flex-end',
+    alignItems: 'center',
+    marginEnd: '2%',
+  },
+  bottom_button_camera_container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: '2%',
+  },
+  button_flip_camera: {
+    alignItems: 'center',
+    marginEnd: '4%',
+  },
+  button_capture_camera: {
+    alignItems: 'center',
+    marginStart: '40%',
+  },
+  camera_icon: {
+    color: theme.colors.white,
   },
 });
 

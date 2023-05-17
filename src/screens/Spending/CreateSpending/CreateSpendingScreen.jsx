@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, Modal, Image, TextInput } from 'react-native';
+import { View, Text, SafeAreaView, TouchableOpacity, ScrollView, Modal, Image, TextInput, Button } from 'react-native';
 import styles from './createSpending.styles.js';
 import Ionicons from 'react-native-vector-icons/Ionicons.js';
 import { Calendar } from 'react-native-calendars';
 import moment from 'moment';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { Camera, CameraType } from 'expo-camera';
+import * as ImagePicker from 'expo-image-picker';
 import EditMoney from '../../../components/common/EditMoney/EditMoney.component.js';
 import theme from '../../../config/theme.js';
 
@@ -18,19 +20,23 @@ const CreateSpendingScreen = ({ navigation }) => {
 
   const [pressed, setPressed] = useState(false);
 
+  // Spending type
   const [modalSpendingType, setModalSpendingType] = useState(false);
   const [spendingType, setSpendingType] = useState('Loại chi tiêu');
   const [spendingImage, setSpendingImage] = useState('');
 
+  //Friend
   const [modalFriend, setModalFriend] = useState(false);
   const [friend, setFriend] = useState('Bạn bè');
   const [friendAvatar, setFriendAvatar] = useState('');
 
   const date = new Date();
 
+  //Calendar
   const [modalCalendar, setModalCalendar] = useState(false);
   const [selectedDay, setSelectedDay] = useState(moment(date).format('YYYY-MM-DD'));
 
+  //Time
   const [modalTime, setModalTime] = useState(false);
   const [time, setTime] = useState(date);
 
@@ -153,6 +159,58 @@ const CreateSpendingScreen = ({ navigation }) => {
     setModalFriend(false);
   };
 
+  //Image from library
+  const [image, setImage] = useState(null);
+  const openImagePicker = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
+  //Camera
+  const [cameraType, setCameraType] = useState(CameraType.back);
+  const [cameraPermission, setCameraPermission] = useState(null);
+  const [camera, setCamera] = useState(null);
+  const [openedCamera, setOpenedCamera] = useState(false);
+  const [takenImage, setTakenImage] = useState(null);
+
+  const toggleCameraType = async () => {
+    setCameraType((current) => (current === CameraType.back ? CameraType.front : CameraType.back));
+  };
+
+  const permisionFunction = async () => {
+    const cameraPermission = await Camera.requestCameraPermissionsAsync();
+
+    setCameraPermission(cameraPermission.status === 'granted');
+
+    if (cameraPermission.status !== 'granted') {
+      alert('Permission for media access needed.');
+    } else {
+      setOpenedCamera(true);
+    }
+  };
+
+  const takePicture = async () => {
+    if (camera) {
+      const data = await camera.takePictureAsync(null);
+      setImage(data.uri);
+      setOpenedCamera(false);
+    }
+  };
+
+  // useEffect(() => {
+  //   permisionFunction();
+  // }, []);
+
   return (
     <SafeAreaView style={styles.wrapper}>
       <View style={styles.money_amount_container}>
@@ -199,7 +257,6 @@ const CreateSpendingScreen = ({ navigation }) => {
             <View style={styles.category}>
               <Ionicons style={styles.category_icon} name="pencil-outline" size={24} />
               <Text style={styles.category_title}>Ghi chú</Text>
-              {/* <Ionicons style={styles.next_icon} name="chevron-forward-outline" size={24} /> */}
             </View>
           </TouchableOpacity>
         </View>
@@ -234,11 +291,16 @@ const CreateSpendingScreen = ({ navigation }) => {
                 </View>
               </TouchableOpacity>
             </View>
+            {image && (
+              <View style={styles.chosen_image_container}>
+                <Image source={{ uri: image }} style={styles.chosen_image} />
+              </View>
+            )}
             <View style={styles.btn_more_category_container}>
-              <TouchableOpacity style={styles.btn_more_category}>
+              <TouchableOpacity style={styles.btn_more_category} onPress={openImagePicker}>
                 <Ionicons style={styles.btn_more_category_icon} name="cloud-upload-outline" size={24} />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.btn_more_category}>
+              <TouchableOpacity style={styles.btn_more_category} onPress={permisionFunction}>
                 <Ionicons style={styles.btn_more_category_icon} name="camera-outline" size={24} />
               </TouchableOpacity>
             </View>
@@ -376,6 +438,25 @@ const CreateSpendingScreen = ({ navigation }) => {
         onCancel={() => setModalTime(false)}
         isDarkModeEnabled={true}
       />
+      <Modal transparent={true} visible={openedCamera} animationType="fade">
+        <View style={styles.camera_container}>
+          <Camera ref={(ref) => setCamera(ref)} style={styles.camera} type={cameraType}>
+            <View style={styles.button_camera_container}>
+              <TouchableOpacity style={styles.button_close_camera} onPress={() => setOpenedCamera(false)}>
+                <Ionicons style={styles.camera_icon} name="close-outline" size={42} />
+              </TouchableOpacity>
+              <View style={styles.bottom_button_camera_container}>
+                <TouchableOpacity style={styles.button_capture_camera} onPress={takePicture}>
+                  <Ionicons style={styles.camera_icon} name="ellipse-outline" size={90} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button_flip_camera} onPress={toggleCameraType}>
+                  <Ionicons style={styles.camera_icon} name="camera-reverse-outline" size={42} />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Camera>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };

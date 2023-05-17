@@ -5,6 +5,7 @@ import SpendDetail from '../../../components/common/SpendDetail/SpendDetail.comp
 import EnterMoney from '../../../components/common/EnterMoney/EnterMoney.component.js';
 import DisplayMoney from '../../../components/common/DisplayMoney/DisplayMoney.component.js';
 import theme from '../../../config/theme.js';
+import moment from 'moment';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const SpendScheduleScreen = ({ navigation }) => {
@@ -17,6 +18,23 @@ const SpendScheduleScreen = ({ navigation }) => {
 
   const [modalAddMoney, setModalAddMoney] = useState(false);
   const [modalSubMoney, setModalSubMoney] = useState(false);
+
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [selectedMonth, setSelectedMonth] = useState('Tháng này');
+
+  const switchToPreMonth = () => {
+    currentMonth.setMonth(currentMonth.getMonth() - 1);
+    let a = currentMonth;
+    setSelectedMonth('Tháng ' + moment(a).format('MM/YYYY'));
+    setCurrentMonth(a);
+  };
+
+  const switchToNextMonth = () => {
+    currentMonth.setMonth(currentMonth.getMonth() + 1);
+    let a = currentMonth;
+    setSelectedMonth('Tháng ' + moment(a).format('MM/YYYY'));
+    setCurrentMonth(a);
+  };
 
   return (
     <View style={styles.container}>
@@ -49,11 +67,11 @@ const SpendScheduleScreen = ({ navigation }) => {
         />
       </View>
       <View style={styles.select_month_container}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={switchToPreMonth}>
           <MaterialIcons name="navigate-before" size={30} color="white" />
         </TouchableOpacity>
-        <Text style={styles.select_month_text}>Tháng này</Text>
-        <TouchableOpacity>
+        <Text style={styles.select_month_text}>{selectedMonth}</Text>
+        <TouchableOpacity onPress={switchToNextMonth}>
           <MaterialIcons name="navigate-next" size={30} color="white" />
         </TouchableOpacity>
       </View>
