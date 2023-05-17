@@ -27,16 +27,16 @@ const styles = StyleSheet.create({
     color: theme.colors.tertiary,
   },
   one_day_spending_scrollview: {
-    paddingTop: 20,
+    paddingTop: '8%',
   },
   date_scroll_view_container: {
-    marginTop: 20,
+    marginTop: '6%',
     backgroundColor: theme.colors.white,
-    paddingVertical: 20,
+    paddingVertical: '4%',
   },
   detail_container: {
-    marginHorizontal: 24,
-    marginTop: 14,
+    marginHorizontal: '6%',
+    marginVertical: '2.5%',
   },
 });
 
