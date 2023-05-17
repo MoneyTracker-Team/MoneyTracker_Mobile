@@ -1,4 +1,7 @@
 import { StyleSheet } from 'react-native';
+import theme from '../../../config/theme';
+
+const ThemeColor = theme.colors;
 
 const styles = StyleSheet.create({
   // CALENDAR
@@ -29,23 +32,52 @@ const styles = StyleSheet.create({
 
   calendarItemWrapNotCurrMonth: {
     width: '13.285%',
-    backgroundColor: 'grey',
+    backgroundColor: 'rgb(128, 128, 128)',
     paddingTop: 12,
     paddingBottom: 12,
     margin: '0.5%',
+    opacity: 0.3,
+    borderRadius: 4,
   },
 
   calendarItemWrap: {
+    position: 'relative',
     width: '13.285%',
-    backgroundColor: 'blue',
+    backgroundColor: 'rgba(128, 128, 128, 0.3)',
     paddingTop: 12,
     paddingBottom: 12,
     margin: '0.5%',
+    borderRadius: 4,
   },
 
   calendarItemText: {
     color: '#fff',
     textAlign: 'center',
+  },
+
+  todayItemWrap: {
+    backgroundColor: ThemeColor.quaternary,
+  },
+
+  quantitySpendWrap: {
+    position: 'absolute',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    bottom: -2,
+    right: -2,
+    width: 18,
+    height: 18,
+    backgroundColor: ThemeColor.tertiary,
+    borderRadius: 100,
+  },
+
+  quantitySpendText: {
+    fontWeight: '600',
+  },
+
+  bgGreen: {
+    backgroundColor: ThemeColor.light_green,
   },
 
   // CONTROL MONTH
@@ -71,8 +103,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
+  // STATISTIC
+
   example: {
-    color: '#000',
+    color: '#fff',
   },
 });
 

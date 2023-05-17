@@ -1,23 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ImageBackground, TouchableOpacity } from 'react-native';
 import styles from './calendar.styles.js';
+import checkToDay from '../../../utils/checkToDay.js';
 import bgImg from '../../../../assets/bg-img.png';
 // import icon
 import Entypo from 'react-native-vector-icons/Entypo';
 
-const monthOfYears = [
-  'Tháng 1',
-  'Tháng 2',
-  'Tháng 3',
-  'Tháng 4',
-  'Tháng 5',
-  'Tháng 6',
-  'Tháng 7',
-  'Tháng 8',
-  'Tháng 9',
-  'Tháng 10',
-  'Tháng 11',
-  'Tháng 12',
+const mockData = [
+  {
+    date: new Date(2023, 5),
+    data: '',
+  },
 ];
 
 const dayOfWeeks = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'CN'];
@@ -69,16 +62,20 @@ function CalendarScreen() {
     var dateOfCalendars = [];
     for (let i = 1; i < firstDayOfMonth; i++) {
       dateOfCalendars.push(
-        <View style={styles.calendarItemWrapNotCurrMonth}>
+        <View key={'lastdateofmonth' + i} style={styles.calendarItemWrapNotCurrMonth}>
           <Text style={styles.calendarItemText}>{lastDateOfPrevMonth - firstDayOfMonth + i}</Text>
         </View>,
       );
     }
     // current date of month
     for (let i = 1; i <= lastDateOfMonth; i++) {
+      let isToday = checkToDay(i, currMonth, currYear);
       dateOfCalendars.push(
-        <View style={styles.calendarItemWrap}>
+        <View key={'currentdateofmonth' + i} style={[styles.calendarItemWrap, isToday ? styles.todayItemWrap : '']}>
           <Text style={styles.calendarItemText}>{i}</Text>
+          <View style={[styles.quantitySpendWrap, isToday ? styles.bgGreen : '']}>
+            <Text style={styles.quantitySpendText}>4</Text>
+          </View>
         </View>,
       );
     }
@@ -86,7 +83,7 @@ function CalendarScreen() {
     if (lastDayOfMonth > 0) {
       for (let i = lastDayOfMonth; i <= 6; i++) {
         dateOfCalendars.push(
-          <View style={styles.calendarItemWrapNotCurrMonth}>
+          <View key={'nextdateofmonth' + i} style={styles.calendarItemWrapNotCurrMonth}>
             <Text style={styles.calendarItemText}>{i - lastDayOfMonth + 1}</Text>
           </View>,
         );
@@ -98,6 +95,7 @@ function CalendarScreen() {
   return (
     <ImageBackground source={bgImg} style={{ height: '100%' }}>
       <View>
+        {/* CALENDAR */}
         <View style={styles.calendarWrapper}>
           {/* Calendar Header */}
           <View style={styles.calendarHeader}>
@@ -113,6 +111,7 @@ function CalendarScreen() {
           <View style={styles.calendarBody}>{renderDate()}</View>
         </View>
 
+        {/* CONTROL */}
         <View style={styles.controlMonth}>
           {/* Prev Button */}
           <TouchableOpacity onPress={handlePressPreMonth}>
@@ -125,6 +124,7 @@ function CalendarScreen() {
             <Entypo style={styles.buttonControlMonth} name="chevron-right" />
           </TouchableOpacity>
         </View>
+
         <Text style={styles.example}>This is Calendar Screen</Text>
       </View>
     </ImageBackground>
