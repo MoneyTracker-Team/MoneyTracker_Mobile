@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import MainAppNavigator from '../navigations/tabs.navigator.js';
 import { StackFromAuth } from '../navigations/stacks.navigator.js';
+import SpendScheduleScreen from './Schedule/SpendSchedule/SpendScheduleScreen.jsx';
 
 const Stack = createStackNavigator();
 
