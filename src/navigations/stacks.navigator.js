@@ -14,7 +14,16 @@ import CreateSpendingScreen from '../screens/Spending/CreateSpending';
 import Calendar from '../screens/SpendHistory/Calendar';
 
 import StatisticScreen from '../screens/Statistic/StatisticPie';
+
 import AccountSettingScreen from '../screens/AccountSetting';
+import PersonalAccountScreen from '../screens/AccountSetting/PersonalAccount';
+import UpdateInfoScreen from '../screens/AccountSetting/PersonalAccount/UpdateInfo';
+import ChangePasswordScreen from '../screens/AccountSetting/ChangePassword';
+import ExpenseCategoriesScreen from '../screens/AccountSetting/ExpenseCategories';
+import FriendsListScreen from '../screens/AccountSetting/FriendsList';
+import LoansScreen from '../screens/AccountSetting/Loans';
+import SavingsScreen from '../screens/AccountSetting/Savings';
+import AboutScreen from '../screens/AccountSetting/About';
 
 const Stack = createStackNavigator();
 
@@ -62,7 +71,7 @@ const StackFromSpendHistoryTag = () => {
         ),
       }}
     >
-      <Stack.Screen name="HistoryCalendar" component={Calendar} options={{ headerLeft: () => <></> }} />
+      <Stack.Screen name="Chi tiêu trong tháng" component={Calendar} options={{ headerLeft: () => <></> }} />
     </Stack.Navigator>
   );
 };
@@ -99,6 +108,22 @@ const StackFromAccountTag = () => {
       }}
     >
       <Stack.Screen name="AccountSetting" component={AccountSettingScreen} options={{ headerLeft: () => <></> }} />
+      <Stack.Screen
+        name="PersonalAccount"
+        component={PersonalAccountScreen}
+        options={{ title: 'Thông tin tài khoản' }}
+      />
+      <Stack.Screen name="UpdateInfo" component={UpdateInfoScreen} options={{ title: 'Cập nhật thông tin' }} />
+      <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} options={{ title: 'Đổi mật khẩu' }} />
+      <Stack.Screen
+        name="ExpenseCategories"
+        component={ExpenseCategoriesScreen}
+        options={{ title: 'Danh mục chi tiêu' }}
+      />
+      <Stack.Screen name="FriendsList" component={FriendsListScreen} options={{ title: 'Danh sách bạn bè' }} />
+      <Stack.Screen name="Loans" component={LoansScreen} options={{ title: 'Khoản vay nợ' }} />
+      <Stack.Screen name="Savings" component={SavingsScreen} options={{ title: 'Điều chỉnh tiền tiết kiệm' }} />
+      <Stack.Screen name="About" component={AboutScreen} options={{ title: 'Thông tin ứng dụng' }} />
     </Stack.Navigator>
   );
 };
