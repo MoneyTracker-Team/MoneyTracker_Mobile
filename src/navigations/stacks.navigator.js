@@ -9,6 +9,7 @@ import SignupScreen from '../screens/Auth/Signup';
 import HomeScreen from '../screens/Home';
 import SpendScheduleScreen from '../screens/Schedule/SpendSchedule/SpendScheduleScreen';
 import ScheduleDetailScreen from '../screens/Schedule/ScheduleDetail';
+import CreateSpendingScreen from '../screens/Spending/CreateSpending';
 
 import Calendar from '../screens/SpendHistory/Calendar';
 
@@ -41,8 +42,9 @@ const StackFromHomeTag = () => {
       }}
     >
       <Stack.Screen name="Home" component={HomeScreen} options={{ headerLeft: () => <></>, title: 'Trang chủ' }} />
-      <Stack.Screen name="SpendSchedule" component={SpendScheduleScreen} options={{ title: 'Kế hoạch chi tiêu' }} />
-      <Stack.Screen name="ScheduleDetail" component={ScheduleDetailScreen} options={{ title: 'Chi tiết kế hoạch' }} />
+      <Stack.Screen name="SpendSchedule" component={SpendScheduleScreen} options={{ title: 'Lập kế hoạch chi tiêu' }} />
+      <Stack.Screen name="ScheduleDetail" component={ScheduleDetailScreen} options={{ title: 'Chi tiết chi tiêu' }} />
+      <Stack.Screen name="CreateSpending" component={CreateSpendingScreen} options={{ title: 'Tạo phiếu chi tiêu' }} />
     </Stack.Navigator>
   );
 };
