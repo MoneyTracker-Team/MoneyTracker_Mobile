@@ -138,6 +138,12 @@ const styles = StyleSheet.create({
     marginTop: '14%',
     justifyContent: 'center',
   },
+  modalViewTop: {
+    height: '100%',
+    backgroundColor: 'rgba(54, 54, 54, 0.75)',
+    marginTop: '14%',
+    justifyContent: 'center',
+  },
   modal_spending_type_container: {
     marginHorizontal: '8%',
     marginVertical: '25%',
@@ -209,8 +215,11 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   modal_friend_container: {
-    marginHorizontal: '8%',
-    marginVertical: '42%',
+    height: '65%',
+    width: '85%',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    height: 500,
   },
   modal_friend_header: {
     backgroundColor: theme.colors.quaternary,
@@ -402,6 +411,29 @@ const styles = StyleSheet.create({
   },
   camera_icon: {
     color: theme.colors.white,
+  },
+  modal_note_container: {
+    marginHorizontal: '8%',
+    marginVertical: '25%',
+    borderRadius: 50,
+    height: 280,
+  },
+  note_input_container: {
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+    backgroundColor: theme.colors.white,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    height: '40%',
+  },
+  note_input: {
+    backgroundColor: '#D9D9D9',
+    height: '47%',
+    width: '70%',
+    borderRadius: 10,
+    marginRight: '2%',
+    paddingLeft: 15,
   },
 });
 
