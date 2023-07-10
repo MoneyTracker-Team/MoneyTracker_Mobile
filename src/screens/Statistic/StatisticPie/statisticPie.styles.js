@@ -12,6 +12,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  pie_chart_text: {
+    color: theme.colors.white,
+    fontSize: 20,
+  },
   spending_type_container: {
     height: '25%',
     width: '100%',

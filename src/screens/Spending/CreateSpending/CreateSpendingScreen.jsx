@@ -123,7 +123,6 @@ const CreateSpendingScreen = ({ navigation }) => {
     setModalFriend(false);
     setSearchFriendText('');
     setSearchedListFriend([]);
-    setTempFriends('');
   };
 
   const handleTextChange = (value) => {
@@ -144,12 +143,22 @@ const CreateSpendingScreen = ({ navigation }) => {
     setFriends([...friends, item]);
     setSearchFriendText('');
     setSearchedListFriend([]);
-    setModalFriend(false);
     setListFriendForCreate([...listFriendForCreate, item._id]);
   };
 
+  const handleDeleteFriendItem = (friend) => {
+    const deletedFriendList = friends.filter((item) => item._id != friend._id);
+    setFriends(deletedFriendList);
+    if (friend.createdAt) {
+      const deletedFriendListForCreate = listFriendForCreate.filter((item) => item != friend._id);
+      setListFriendForCreate(deletedFriendListForCreate);
+    } else {
+      const deleteTempFriendList = listTempFriend.filter((item) => item != friend.name);
+      setListTempFriend(deleteTempFriendList);
+    }
+  };
+
   const [tempFriendName, setTempFriendName] = useState('');
-  const [tempFriends, setTempFriends] = useState([]);
   const [listTempFriend, setListTempFriend] = useState([]);
   const handleTempFriend = (value) => {
     setTempFriendName(value);
@@ -161,8 +170,7 @@ const CreateSpendingScreen = ({ navigation }) => {
         _id: Math.random().toString(),
         name: tempFriendName,
       };
-      setListFriend([newTempFriend, ...listFriend]);
-      setTempFriends([...tempFriends, newTempFriend.name]);
+      setFriends([...friends, newTempFriend]);
       setTempFriendName('');
       setListTempFriend([...listTempFriend, tempFriendName]);
     }
@@ -182,6 +190,14 @@ const CreateSpendingScreen = ({ navigation }) => {
   const [image, setImage] = useState(null);
   const [imageBase64, setImageBase64] = useState('');
 
+  function getCharactersAfterLastDot(str) {
+    const lastDotIndex = str.lastIndexOf('.');
+    if (lastDotIndex !== -1 && lastDotIndex < str.length - 1) {
+      return str.substring(lastDotIndex + 1);
+    }
+    return '';
+  }
+
   const openImagePicker = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -193,7 +209,8 @@ const CreateSpendingScreen = ({ navigation }) => {
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
-      setImageBase64(result.assets[0].base64);
+      const charactersAfterLastDot = getCharactersAfterLastDot(result.assets[0].uri);
+      setImageBase64('data:image/' + charactersAfterLastDot + ';base64,' + result.assets[0].base64);
     }
   };
 
@@ -223,7 +240,8 @@ const CreateSpendingScreen = ({ navigation }) => {
     if (camera) {
       const data = await camera.takePictureAsync({ base64: true });
       setImage(data.uri);
-      setImageBase64(data.base64);
+      const charactersAfterLastDot = getCharactersAfterLastDot(data.uri);
+      setImageBase64('data:image/' + charactersAfterLastDot + ';base64,' + data.base64);
       setOpenedCamera(false);
     }
   };
@@ -257,11 +275,9 @@ const CreateSpendingScreen = ({ navigation }) => {
         body: JSON.stringify(newSpending),
       })
         .then((response) => response.json())
-        .then((data) => {
-          console.log('successful');
-        })
+        .then((data) => {})
         .catch((error) => {
-          console.error('failed');
+          console.error(error);
         });
       Alert.alert('Create speding successfully', '', [
         {
@@ -333,9 +349,23 @@ const CreateSpendingScreen = ({ navigation }) => {
               <TouchableOpacity style={styles.btn_category} onPress={() => setModalFriend(true)}>
                 <View style={styles.category}>
                   <Ionicons style={styles.category_icon} name="people-outline" size={24} />
-                  <Text style={styles.category_title}>
-                    {friends.length == 0 ? 'Bạn bè' : friends.map((friend) => `${friend.name}, `)}
-                  </Text>
+                  {friends.length == 0 ? (
+                    <Text style={styles.category_title}>Bạn bè</Text>
+                  ) : (
+                    <ScrollView horizontal>
+                      {friends.map((friend) => (
+                        <View key={friend._id} style={styles.friend_item_container}>
+                          <Text style={styles.friend_item}>{friend.name}</Text>
+                          <TouchableOpacity
+                            style={styles.btn_delete_friend_item_container}
+                            onPress={() => handleDeleteFriendItem(friend)}
+                          >
+                            <Ionicons style={styles.btn_delete_friend_item} name="close-outline" size={20} />
+                          </TouchableOpacity>
+                        </View>
+                      ))}
+                    </ScrollView>
+                  )}
                   <Ionicons style={styles.next_icon} name="chevron-forward-outline" size={24} />
                 </View>
               </TouchableOpacity>

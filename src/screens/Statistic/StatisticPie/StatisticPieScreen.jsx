@@ -27,23 +27,26 @@ const StatisticPieScreen = ({ navigation }) => {
   const [listDate, setListDate] = useState([]);
 
   const [listSpendingTypeSpend, setListSpendingTypeSpend] = useState([]);
+  const [listSpendingTypeSpendResult, setListSpendingTypeSpendResult] = useState([]);
   const [listAmountSpend, setListAmountSpend] = useState([]);
   const [listAmountSpendResult, setListAmountSpendResult] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const response1 = await fetch(
-        //   'https://moneytrackerserver-production.up.railway.app/type-spends/all-of-user/6476fc3968a24efaacf90dc6',
-        //   {
-        //     method: 'GET',
-        //     headers: {
-        //       'Content-Type': 'application/json',
-        //     },
-        //   },
-        // );
-        // const data = await response1.json();
-        // setListSpendingType(data.data.typeSpends);
+        const response1 = await fetch(
+          `https://moneytrackerserver-production.up.railway.app/spends/pie-chart/6476fc3968a24efaacf90dc6?month=${
+            currentMonth.getMonth() + 1
+          }&year=${currentMonth.getFullYear()}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+        const data = await response1.json();
+        setListSpendingTypeSpend(data.data);
 
         const response2 = await fetch(
           `https://moneytrackerserver-production.up.railway.app/spends/schedule-in-month/6476fc3968a24efaacf90dc6?month=${
@@ -81,6 +84,34 @@ const StatisticPieScreen = ({ navigation }) => {
     );
   }, [listAmountSpend]);
 
+  const getRandomColor = () => {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+
+    for (var i = 0; i < 6; i++) {
+      var randomIndex = Math.floor(Math.random() * letters.length);
+      var randomChar = letters.charAt(randomIndex);
+
+      color += randomChar;
+    }
+
+    return color;
+  };
+
+  useEffect(() => {
+    setListSpendingTypeSpendResult(
+      listSpendingTypeSpend.map((item) => {
+        return {
+          name: item.typeSpend,
+          totalMoney: item.totalMoney,
+          color: getRandomColor(),
+          legendFontColor: '#7F7F7F',
+          legendFontSize: 15,
+        };
+      }),
+    );
+  }, [listSpendingTypeSpend]);
+
   const switchToPreMonth = () => {
     currentMonth.setMonth(currentMonth.getMonth() - 1);
     let a = currentMonth;
@@ -115,47 +146,6 @@ const StatisticPieScreen = ({ navigation }) => {
 
     return allDays;
   }
-
-  // const pieChartData = [50, 50];
-  // const colors = ['green', 'blue'];
-
-  const pieChartData = [
-    {
-      name: 'Seoul',
-      population: 21500000,
-      color: 'rgba(131, 167, 234, 1)',
-      legendFontColor: '#7F7F7F',
-      legendFontSize: 15,
-    },
-    {
-      name: 'Toronto',
-      population: 2800000,
-      color: '#F00',
-      legendFontColor: '#7F7F7F',
-      legendFontSize: 15,
-    },
-    {
-      name: 'Beijing',
-      population: 527612,
-      color: 'yellow',
-      legendFontColor: '#7F7F7F',
-      legendFontSize: 15,
-    },
-    {
-      name: 'New York',
-      population: 8538000,
-      color: '#ffffff',
-      legendFontColor: '#7F7F7F',
-      legendFontSize: 15,
-    },
-    {
-      name: 'Moscow',
-      population: 11920000,
-      color: 'rgb(0, 0, 255)',
-      legendFontColor: '#7F7F7F',
-      legendFontSize: 15,
-    },
-  ];
 
   const barChartData = {
     labels: listDate,
@@ -201,21 +191,21 @@ const StatisticPieScreen = ({ navigation }) => {
       <ScreenTab listTab={listTab} status={status} setStatusFilter={setStatusFilter} />
       {status === 'pie' ? (
         <View style={styles.statistic_container}>
-          {/* <PieChart data={pieChartData} colors={colors} size={300} />
-          <View style={styles.spending_type_container}>
-            <Text>Haha</Text>
-          </View> */}
-          <PieChart
-            data={pieChartData}
-            width={screenWidth}
-            height={screenHeight / 2.9}
-            chartConfig={chartConfig}
-            accessor={'population'}
-            backgroundColor={'transparent'}
-            paddingLeft={'30'}
-            center={[0, 0]}
-            avoidFalseZero={true}
-          />
+          {listSpendingTypeSpendResult.length === 0 ? (
+            <Text style={styles.pie_chart_text}>Không có dữ liệu</Text>
+          ) : (
+            <PieChart
+              data={listSpendingTypeSpendResult}
+              width={screenWidth}
+              height={screenHeight / 2.9}
+              chartConfig={chartConfig}
+              accessor={'totalMoney'}
+              backgroundColor={'transparent'}
+              paddingLeft={'30'}
+              center={[0, 0]}
+              avoidFalseZero={true}
+            />
+          )}
         </View>
       ) : (
         <View style={styles.statistic_container}>
