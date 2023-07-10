@@ -21,6 +21,8 @@ const SpendScheduleScreen = ({ navigation }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedMonth, setSelectedMonth] = useState('Tháng này');
 
+  const [scheduleMoney, setScheduleMoney] = useState(0);
+
   useEffect(() => {
     fetch(
       `https://moneytrackerserver-production.up.railway.app/spends/schedule-in-month/6476fc3968a24efaacf90dc6?month=${
@@ -36,14 +38,45 @@ const SpendScheduleScreen = ({ navigation }) => {
       });
   }, [selectedMonth]);
 
+  useEffect(() => {
+    if (Object.keys(currentSchedule).length !== 0) {
+      const updatedScheduleMoney = {
+        moneyAdjust: scheduleMoney,
+      };
+      fetch(
+        `https://moneytrackerserver-production.up.railway.app/schedules/adjust-money/${currentSchedule.scheduleId}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedScheduleMoney),
+        },
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.data !== undefined) {
+            setCurrentSchedule({
+              ...currentSchedule,
+              scheduleMoney: data.data.scheduleMoney,
+            });
+          }
+
+          setScheduleMoney(0);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [scheduleMoney]);
+
   const [modalAddMoney, setModalAddMoney] = useState(false);
   const [modalSubMoney, setModalSubMoney] = useState(false);
-
-  const [scheduleMoney, setScheduleMoney] = useState(0);
 
   const switchToPreMonth = () => {
     currentMonth.setMonth(currentMonth.getMonth() - 1);
     let a = currentMonth;
+    setScheduleMoney(0);
     setSelectedMonth(moment(a).format('MM/YYYY'));
     setCurrentMonth(a);
   };
@@ -51,6 +84,7 @@ const SpendScheduleScreen = ({ navigation }) => {
   const switchToNextMonth = () => {
     currentMonth.setMonth(currentMonth.getMonth() + 1);
     let a = currentMonth;
+    setScheduleMoney(0);
     setSelectedMonth(moment(a).format('MM/YYYY'));
     setCurrentMonth(a);
   };

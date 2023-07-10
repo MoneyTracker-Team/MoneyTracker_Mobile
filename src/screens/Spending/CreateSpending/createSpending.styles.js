@@ -214,6 +214,24 @@ const styles = StyleSheet.create({
     color: theme.colors.quaternary,
     padding: 8,
   },
+  friend_item_container: {
+    flexDirection: 'row',
+    backgroundColor: theme.colors.text_blur,
+    justifyContent: 'space-between',
+    borderRadius: 20,
+    borderWidth: 0.8,
+  },
+  friend_item: {
+    fontSize: theme.fontSizes.text_body,
+    color: theme.colors.white,
+    textAlignVertical: 'center',
+  },
+  btn_delete_friend_item_container: {
+    justifyContent: 'center',
+  },
+  btn_delete_friend_item: {
+    color: theme.colors.black,
+  },
   modal_friend_container: {
     height: '65%',
     width: '85%',
