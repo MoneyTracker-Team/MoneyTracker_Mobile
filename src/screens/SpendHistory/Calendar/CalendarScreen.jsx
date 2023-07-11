@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, Text, ImageBackground, Image, TouchableOpacity, Modal, TextInput, ScrollView } from 'react-native';
 import styles from './calendar.styles.js';
 import checkToDay from '../../../utils/checkToDay.js';
 import bgImg from '../../../../assets/bg-img.png';
+import theme from '../../../config/theme';
 // import icon
 import Entypo from 'react-native-vector-icons/Entypo';
+import Ionicons from 'react-native-vector-icons/Ionicons.js';
 
 const dayOfWeeks = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'CN'];
 
@@ -13,6 +15,8 @@ function CalendarScreen() {
   const [currMonth, setCurrMonth] = useState(new Date().getMonth());
   const [statisticData, setStatictisData] = useState({});
   const [spends, setSpends] = useState([]);
+  // modal
+  const [visibleModal, setVisibleModal] = useState(true);
 
   // ngày đầu tiên tháng hiện tại thuộc thứ mấy trong tuần => [1,2,3,4,5,6,0]
   let firstDayOfMonth = new Date(currYear, currMonth, 1).getDay();
@@ -134,11 +138,21 @@ function CalendarScreen() {
   };
 
   const handleShowSpendInDate = (date) => {
-    // handle show spend in pick date
+    console.log(`${date}-${currMonth + 1}-${currYear}`);
+    setVisibleModal(true);
   };
 
   const handleViewSpendMonthly = () => {
-    // handle show spend monthly here
+    console.log(`${currMonth + 1}-${currYear}`);
+  };
+
+  //* MODAL
+  const handleCloseModal = () => {
+    setVisibleModal(false);
+  };
+
+  const handleNavigateToDetailSpend = () => {
+    //
   };
 
   return (
@@ -205,6 +219,52 @@ function CalendarScreen() {
           </View>
         </View>
       </View>
+
+      {/* Modal detail spend in date */}
+      <Modal transparent={true} visible={visibleModal} animationType="fade">
+        <View style={styles.modal_background}>
+          <View style={styles.modal_spend_container}>
+            <View style={styles.modal_spend_header}>
+              <View style={{ display: 'flex', flexDirection: 'column' }}>
+                <Text style={{ color: theme.colors.white, fontSize: 20, fontWeight: '600' }}>31.000 VND</Text>
+                <Text style={{ color: theme.colors.white, fontSize: theme.fontSizes.text_body }}>Ngày: 06/06/2023</Text>
+              </View>
+              {/* Close modal btn */}
+              <TouchableOpacity onPress={() => handleCloseModal()}>
+                <Ionicons style={styles.btn_more_category_icon} name="close-outline" size={28} />
+              </TouchableOpacity>
+            </View>
+            {/* Body modal */}
+            <View style={styles.modal_spend_content}>
+              <ScrollView contentContainerStyle={styles.modal_spend_scroll_view_content}>
+                {[1, 1, 1, 1, 1, 1, 1].map((item, index) => {
+                  return (
+                    //* Spend Item
+                    <View key={index} style={styles.btn_spend}>
+                      <View style={styles.spend}>
+                        <Image
+                          style={styles.spend_img}
+                          source={{
+                            uri: 'https://res.cloudinary.com/dwskvqnkc/image/upload/v1685377490/avt_cfzkte.jpg',
+                          }}
+                        />
+                        <View style={styles.text_container}>
+                          <Text style={styles.spend_name}>{'Tên chi tiêu'}</Text>
+                          <Text style={styles.spend_text}>{'Giờ'}</Text>
+                        </View>
+                        <TouchableOpacity onPress={handleNavigateToDetailSpend}>
+                          <Ionicons style={styles.spend_icon} name="chevron-forward-sharp" size={24} />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  );
+                })}
+              </ScrollView>
+            </View>
+            <View style={styles.line}></View>
+          </View>
+        </View>
+      </Modal>
     </ImageBackground>
   );
 }

@@ -162,6 +162,114 @@ const styles = StyleSheet.create({
   example: {
     color: '#fff',
   },
+
+  // MODAL:
+  modal_background: {
+    flex: 1,
+    backgroundColor: 'rgba(54, 54, 54, 0.75)',
+    marginTop: '14%',
+    justifyContent: 'center',
+  },
+
+  friend_item_container: {
+    flexDirection: 'row',
+    backgroundColor: theme.colors.text_blur,
+    justifyContent: 'space-between',
+    borderRadius: 20,
+    borderWidth: 0.8,
+  },
+  friend_item: {
+    fontSize: theme.fontSizes.text_body,
+    color: theme.colors.white,
+    textAlignVertical: 'center',
+  },
+  btn_delete_friend_item_container: {
+    justifyContent: 'center',
+  },
+  btn_delete_friend_item: {
+    color: theme.colors.black,
+  },
+  modal_spend_container: {
+    height: '65%',
+    width: '85%',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    height: 500,
+  },
+  modal_spend_header: {
+    backgroundColor: theme.colors.quaternary,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    height: '14%',
+    alignItems: 'center',
+    paddingHorizontal: '5%',
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+  },
+
+  modal_spend_content: {
+    backgroundColor: theme.colors.white,
+    height: '90%',
+    paddingBottom: '2%',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+  modal_spend_scroll_view_content: {
+    alignItems: 'center',
+    marginTop: '2%',
+    paddingBottom: '5%',
+  },
+  btn_spend: {
+    flex: 1,
+    width: '88%',
+    backgroundColor: theme.colors.white,
+    elevation: 4,
+    shadowColor: theme.colors.black,
+    borderRadius: 25,
+    justifyContent: 'center',
+    marginVertical: '2%',
+    paddingVertical: '3%',
+  },
+  spend: {
+    marginVertical: '1%',
+    marginHorizontal: '5%',
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  spend_img: {
+    padding: 20,
+    borderRadius: 50,
+    marginEnd: '8%',
+  },
+  spend_img_display: {
+    paddingHorizontal: '6%',
+    height: '90%',
+    marginLeft: '1%',
+    borderRadius: 50,
+    marginEnd: '8%',
+    alignSelf: 'center',
+  },
+  text_container: {
+    flex: 1,
+  },
+  spend_name: {
+    fontSize: theme.fontSizes.text_body,
+    color: theme.colors.black,
+    textAlignVertical: 'center',
+    fontWeight: '400',
+  },
+  spend_text: {
+    color: '#6F6F6F',
+    fontSize: theme.fontSizes.text_body_small,
+  },
+  spend_icon: {
+    color: theme.colors.quaternary,
+    padding: 8,
+  },
+  line: {
+    height: 1,
+    backgroundColor: theme.colors.quaternary,
+  },
 });
 
 export default styles;
