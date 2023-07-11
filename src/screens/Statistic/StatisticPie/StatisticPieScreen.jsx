@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, SafeAreaView, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, Button, SafeAreaView, TouchableOpacity, Dimensions, ImageBackground } from 'react-native';
 import styles from './statisticPie.styles.js';
 import ScreenTab from '../../../components/ScreenTab/ScreenTab.component.js';
 import { MaterialIcons } from '@expo/vector-icons';
 import moment from 'moment';
 import { BarChart, PieChart } from 'react-native-chart-kit';
+import background from '../../../../assets/bg-img.png';
 import theme from '../../../config/theme.js';
 
 const StatisticPieScreen = ({ navigation }) => {
@@ -187,54 +188,56 @@ const StatisticPieScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScreenTab listTab={listTab} status={status} setStatusFilter={setStatusFilter} />
-      {status === 'pie' ? (
-        <View style={styles.statistic_container}>
-          {listSpendingTypeSpendResult.length === 0 ? (
-            <Text style={styles.pie_chart_text}>Không có dữ liệu</Text>
-          ) : (
-            <PieChart
-              data={listSpendingTypeSpendResult}
+    <ImageBackground source={background} style={styles.container}>
+      <SafeAreaView style={{ flex: 1 }}>
+        <ScreenTab listTab={listTab} status={status} setStatusFilter={setStatusFilter} />
+        {status === 'pie' ? (
+          <View style={styles.statistic_container}>
+            {listSpendingTypeSpendResult.length === 0 ? (
+              <Text style={styles.pie_chart_text}>Không có dữ liệu</Text>
+            ) : (
+              <PieChart
+                data={listSpendingTypeSpendResult}
+                width={screenWidth}
+                height={screenHeight / 2.9}
+                chartConfig={chartConfig}
+                accessor={'totalMoney'}
+                backgroundColor={'transparent'}
+                paddingLeft={'30'}
+                center={[0, 0]}
+                avoidFalseZero={true}
+              />
+            )}
+          </View>
+        ) : (
+          <View style={styles.statistic_container}>
+            <BarChart
+              data={barChartData}
               width={screenWidth}
-              height={screenHeight / 2.9}
+              height={screenHeight / 2}
+              yAxisSuffix="K"
               chartConfig={chartConfig}
-              accessor={'totalMoney'}
-              backgroundColor={'transparent'}
-              paddingLeft={'30'}
-              center={[0, 0]}
-              avoidFalseZero={true}
+              fromZero={true}
+              showBarTops={true}
+              withInnerLines={true}
             />
-          )}
+          </View>
+        )}
+        <View style={styles.select_month_container}>
+          <TouchableOpacity onPress={switchToPreMonth}>
+            <MaterialIcons name="navigate-before" size={30} color="white" />
+          </TouchableOpacity>
+          <Text style={styles.select_month_text}>
+            {currentMonth.getMonth() == new Date().getMonth() && currentMonth.getFullYear() == new Date().getFullYear()
+              ? 'Tháng này'
+              : selectedMonth}
+          </Text>
+          <TouchableOpacity onPress={switchToNextMonth}>
+            <MaterialIcons name="navigate-next" size={30} color="white" />
+          </TouchableOpacity>
         </View>
-      ) : (
-        <View style={styles.statistic_container}>
-          <BarChart
-            data={barChartData}
-            width={screenWidth}
-            height={screenHeight / 2}
-            yAxisSuffix="K"
-            chartConfig={chartConfig}
-            fromZero={true}
-            showBarTops={true}
-            withInnerLines={true}
-          />
-        </View>
-      )}
-      <View style={styles.select_month_container}>
-        <TouchableOpacity onPress={switchToPreMonth}>
-          <MaterialIcons name="navigate-before" size={30} color="white" />
-        </TouchableOpacity>
-        <Text style={styles.select_month_text}>
-          {currentMonth.getMonth() == new Date().getMonth() && currentMonth.getFullYear() == new Date().getFullYear()
-            ? 'Tháng này'
-            : selectedMonth}
-        </Text>
-        <TouchableOpacity onPress={switchToNextMonth}>
-          <MaterialIcons name="navigate-next" size={30} color="white" />
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </ImageBackground>
   );
 };
 

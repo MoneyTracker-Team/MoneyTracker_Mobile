@@ -4,7 +4,6 @@ import theme from '../../../config/theme';
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: 'black',
   },
   money_amount_container: {
     height: '35%',
@@ -300,6 +299,13 @@ const styles = StyleSheet.create({
     marginHorizontal: '5%',
     display: 'flex',
     flexDirection: 'row',
+  },
+  disabled_friend: {
+    marginVertical: '1%',
+    marginHorizontal: '5%',
+    display: 'flex',
+    flexDirection: 'row',
+    opacity: 0.5,
   },
   friend_img: {
     padding: 20,
