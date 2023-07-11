@@ -6,18 +6,13 @@ import bgImg from '../../../../assets/bg-img.png';
 // import icon
 import Entypo from 'react-native-vector-icons/Entypo';
 
-const mockData = [
-  {
-    date: new Date(2023, 5),
-    data: '',
-  },
-];
-
 const dayOfWeeks = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'CN'];
 
 function CalendarScreen() {
   const [currYear, setCurrYear] = useState(new Date().getFullYear());
   const [currMonth, setCurrMonth] = useState(new Date().getMonth());
+  const [statisticData, setStatictisData] = useState({});
+  const [spends, setSpends] = useState([]);
 
   // ngày đầu tiên tháng hiện tại thuộc thứ mấy trong tuần => [1,2,3,4,5,6,0]
   let firstDayOfMonth = new Date(currYear, currMonth, 1).getDay();
@@ -28,7 +23,28 @@ function CalendarScreen() {
   // ngày cuối cùng trong tháng hiện tại thuộc thứ mấy trong tuần
   let lastDayOfMonth = new Date(currYear, currMonth, lastDateOfMonth).getDay();
 
-  useEffect(() => {}, []);
+  //* fetch data
+  useEffect(() => {
+    const fetchDataInMonth = async () => {
+      fetch(
+        `https://moneytrackerserver-production.up.railway.app/spends/in-month/6476fc3968a24efaacf90dc6?month=${
+          currMonth + 1
+        }&year=${currYear}`,
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          //* set data to state
+          const { totalMoney, fixedMoney, maxTotalMoney, minTotalMoney } = data.data;
+          const newStatistic = { totalMoney, fixedMoney, maxTotalMoney, minTotalMoney };
+          setStatictisData(newStatistic);
+          setSpends(data?.data?.spends);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+    fetchDataInMonth();
+  }, [currMonth, currYear]);
 
   const handlePressPreMonth = () => {
     if (currMonth === 0) {
@@ -57,9 +73,32 @@ function CalendarScreen() {
     );
   };
 
+  const renderQntSpendInDate = (day) => {
+    let isToday = checkToDay(day, currMonth, currYear);
+    const formatDate = `${currYear}-${currMonth + 1 <= 9 ? '0' + (currMonth + 1) : currMonth + 1}-${
+      day <= 9 ? '0' + day : day
+    }`;
+    let qnt = 0;
+    if (spends && Array.isArray(spends)) {
+      spends.forEach((element) => {
+        if (element._id === formatDate) {
+          qnt = Number(element.totalSpend);
+          return;
+        }
+      });
+    }
+    return qnt > 0 ? (
+      <View style={[styles.quantitySpendWrap, isToday ? styles.bgGreen : '']}>
+        <Text style={styles.quantitySpendText}>{qnt}</Text>
+      </View>
+    ) : (
+      <></>
+    );
+  };
+
   const renderDate = () => {
     // date of last month
-    var dateOfCalendars = [];
+    let dateOfCalendars = [];
     for (let i = 1; i < firstDayOfMonth; i++) {
       dateOfCalendars.push(
         <View key={'lastdateofmonth' + i} style={styles.calendarItemWrapNotCurrMonth}>
@@ -77,9 +116,7 @@ function CalendarScreen() {
           style={[styles.calendarItemWrap, isToday ? styles.todayItemWrap : '']}
         >
           <Text style={styles.calendarItemText}>{i}</Text>
-          <View style={[styles.quantitySpendWrap, isToday ? styles.bgGreen : '']}>
-            <Text style={styles.quantitySpendText}>4</Text>
-          </View>
+          {renderQntSpendInDate(i)}
         </TouchableOpacity>,
       );
     }
@@ -142,7 +179,7 @@ function CalendarScreen() {
           <View style={styles.statisticWrap}>
             {/* Grid Item */}
             <View style={styles.statisticItem}>
-              <Text style={styles.itemlargeText}>1.235K</Text>
+              <Text style={styles.itemlargeText}>{Number(statisticData?.totalMoney ?? 0) / 1000}K</Text>
               <Text style={styles.itemSmallText}>Tổng tiền đã chi tiêu</Text>
             </View>
 
@@ -150,17 +187,19 @@ function CalendarScreen() {
               style={[styles.statisticItem, styles.statisticItemPressable]}
               onPress={handleViewSpendMonthly}
             >
-              <Text style={[styles.itemlargeText, styles.itemlargeTextPressable]}>635K</Text>
+              <Text style={[styles.itemlargeText, styles.itemlargeTextPressable]}>
+                {Number(statisticData?.fixedMoney ?? 0) / 1000}K
+              </Text>
               <Text style={[styles.itemSmallText, styles.itemlargeTextPressable]}>Các khoản cố định</Text>
             </TouchableOpacity>
 
             <View style={styles.statisticItem}>
-              <Text style={styles.itemlargeText}>450K</Text>
+              <Text style={styles.itemlargeText}>{Number(statisticData?.maxTotalMoney ?? 0) / 1000}K</Text>
               <Text style={styles.itemSmallText}>Ngày tiêu nhiều nhất</Text>
             </View>
 
             <View style={styles.statisticItem}>
-              <Text style={styles.itemlargeText}>45K</Text>
+              <Text style={styles.itemlargeText}>{Number(statisticData?.minTotalMoney ?? 0) / 1000}K</Text>
               <Text style={styles.itemSmallText}>Ngày tiêu ít nhất</Text>
             </View>
           </View>
