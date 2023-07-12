@@ -1,55 +1,107 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, Image, TouchableOpacity, ImageBackground } from 'react-native';
 import styles from './personalAccount.styles.js';
-import account from '../../../static/account.js';
+import moment from 'moment/moment.js';
+import background from '../../../../assets/bg-img.png';
 import Ionicons from 'react-native-vector-icons/Ionicons.js';
 import * as ImagePicker from 'expo-image-picker';
+import { AuthContext } from '../../../context/AuthContext/AuthContext.js';
 
-function PersonalAccountScreen({ navigation }) {
+function PersonalAccountScreen({ navigation, route }) {
+  const { rerender, setRerender } = route.params;
+  const userId = useContext(AuthContext).userId;
+  const [userData, setUserData] = useState({});
+  useEffect(() => {
+    setRerender(!rerender);
+    setUserData({});
+    const fetchData = async () => {
+      try {
+        const url = `https://moneytrackerserver-production.up.railway.app/users/${userId}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        setUserData(data.data);
+        setImage(data.data.avatar);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [rerender]);
   useEffect(() => {
     navigation.getParent().setOptions({ tabBarStyle: { display: 'none' } });
     return () => {
       navigation.getParent().setOptions({ tabBarStyle: { display: 'flex' } });
     };
   }, []);
+
   const handlePressEdit = () => {
-    navigation.navigate('UpdateInfo'); // chuyển đến màn hình Chỉnh sửa thông tin
+    navigation.navigate('UpdateInfo', {
+      rerender: rerender,
+      setRerender: setRerender,
+    });
   };
-  const [image, setImage] = useState(account[5].avatar);
+
+  function getCharactersAfterLastDot(str) {
+    const lastDotIndex = str.lastIndexOf('.');
+    if (lastDotIndex !== -1 && lastDotIndex < str.length - 1) {
+      return str.substring(lastDotIndex + 1);
+    }
+    return '';
+  }
+
+  const [image, setImage] = useState('');
   const openImagePicker = async () => {
-    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
+      base64: true,
     });
-
-    console.log(result);
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
-      // Call API update Image here
+      const charactersAfterLastDot = getCharactersAfterLastDot(result.assets[0].uri);
+      handleUpdateAvatar('data:image/' + charactersAfterLastDot + ';base64,' + result.assets[0].base64);
     }
   };
+  const handleUpdateAvatar = (base64) => {
+    fetch(`https://moneytrackerserver-production.up.railway.app/users/update/${userId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        avatar: base64,
+      }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setRerender(rerender);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
-    <View style={styles.wrapper}>
+    <ImageBackground source={background} style={styles.wrapper}>
       <View style={styles.imageContainer}>
-        <Image source={{ uri: image }} style={styles.avatar} />
+        {image && <Image source={{ uri: image }} style={styles.avatar} />}
         <TouchableOpacity style={styles.cameraButton} onPress={openImagePicker}>
           <Ionicons style={styles.cameraIcon} name="camera-outline" size={28} />
         </TouchableOpacity>
       </View>
-
       <View style={styles.infoContainer}>
-        <Text style={styles.name}>{account[5].name}</Text>
+        <Text style={styles.name}>{userData?.name}</Text>
         <View style={styles.tableContainer}>
           <View style={styles.row}>
             <View style={styles.cell}>
-              <Text style={styles.cellText}>Số định danh:</Text>
+              <Text style={styles.cellText}>Khẩu hiệu:</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={styles.cellText}>{account[5].idNumber}</Text>
+              <Text style={styles.cellText}>{userData?.slogan}</Text>
             </View>
           </View>
           <View style={styles.row}>
@@ -57,23 +109,29 @@ function PersonalAccountScreen({ navigation }) {
               <Text style={styles.cellText}>Ngày sinh:</Text>
             </View>
             <View style={styles.cell}>
-              <Text style={styles.cellText}>{account[5].dateOfBirth}</Text>
+              <Text style={styles.cellText}>{moment(userData?.dateOfBirth).format('DD/MM/YYYY')}</Text>
             </View>
           </View>
           <View style={styles.row}>
             <View style={styles.cell}>
               <Text style={styles.cellText}>Giới tính</Text>
             </View>
-            <View style={styles.cell}>
-              <Text style={styles.cellText}>{account[5].gender}</Text>
-            </View>
+            {userData.gender ? (
+              <View style={styles.cell}>
+                <Text style={styles.cellText}>Nam</Text>
+              </View>
+            ) : (
+              <View style={styles.cell}>
+                <Text style={styles.cellText}>Nữ</Text>
+              </View>
+            )}
           </View>
         </View>
         <TouchableOpacity style={styles.btnEdit} onPress={handlePressEdit}>
           <Ionicons style={styles.editIcon} name="pencil-outline" size={30} />
         </TouchableOpacity>
       </View>
-    </View>
+    </ImageBackground>
   );
 }
 

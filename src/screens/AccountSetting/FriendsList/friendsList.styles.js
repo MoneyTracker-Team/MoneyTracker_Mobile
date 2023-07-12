@@ -3,7 +3,6 @@ import theme from '../../../config/theme';
 const styles = StyleSheet.create({
   wrapper: {
     height: '100%',
-    backgroundColor: theme.colors.black,
     display: 'flex',
     flexDirection: 'column',
   },
@@ -15,7 +14,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    backgroundColor: 'rgba(217, 217, 217, 0.19)',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
     height: '20%',
     display: 'flex',
     flexDirection: 'row',
@@ -84,7 +83,6 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.quaternary,
     width: Dimensions.get('window').width * 0.7,
     marginHorizontal: '8%',
-    marginTop: '30%',
     height: 60,
     borderRadius: 10,
     padding: 10,
@@ -157,6 +155,43 @@ const styles = StyleSheet.create({
   },
   centeredComponent: {
     alignItems: 'center',
+  },
+  choosedImage: {
+    position: 'relative',
+    width: '70%',
+    marginHorizontal: '15%',
+    marginVertical: '3%',
+    height: '40%',
+    justifyContent: 'center',
+  },
+  chooseImageBtn: {
+    position: 'absolute',
+    top: '35%',
+    left: '40%',
+    zIndex: 10,
+  },
+  action_icon_1: {
+    color: theme.colors.quaternary,
+    padding: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.16)',
+    borderRadius: 50,
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+  chooseImage: {
+    position: 'relative',
+    backgroundColor: '#ccc',
+    width: '70%',
+    marginHorizontal: '15%',
+    marginVertical: '3%',
+    height: '40%',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    borderColor: theme.colors.black,
+    justifyContent: 'center',
   },
 });
 

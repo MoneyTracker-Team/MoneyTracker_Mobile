@@ -3,12 +3,17 @@ import theme from '../../../../config/theme';
 const imageHeight = Dimensions.get('window').width * 0.12;
 const styles = StyleSheet.create({
   frienddata: {
-    backgroundColor: '#000',
     display: 'flex',
     flexDirection: 'row',
     marginVertical: '2%',
     marginHorizontal: '8%',
     height: imageHeight,
+  },
+  friendAvatar: {
+    marginEnd: '5%',
+    width: imageHeight,
+    height: imageHeight,
+    borderRadius: 50,
   },
   friendName: {
     flex: 1,
@@ -80,7 +85,6 @@ const styles = StyleSheet.create({
     width: '40%',
     height: 60,
     marginHorizontal: '8%',
-    marginTop: '30%',
     padding: 10,
     borderRadius: 10,
     display: 'flex',
@@ -93,7 +97,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     width: '40%',
     marginHorizontal: '8%',
-    marginTop: '30%',
     height: 60,
     borderRadius: 10,
     padding: 10,
@@ -113,6 +116,44 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     flex: 1,
+    justifyContent: 'center',
+  },
+  choosedImage: {
+    position: 'relative',
+    width: '70%',
+    marginHorizontal: '15%',
+    marginVertical: '3%',
+    height: '40%',
+    justifyContent: 'center',
+  },
+  chooseImageBtn: {
+    position: 'absolute',
+    top: '35%',
+    left: '40%',
+    zIndex: 10,
+  },
+  action_icon_1: {
+    color: theme.colors.quaternary,
+    padding: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.16)',
+    borderRadius: 50,
+    // margin: '8%',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+  chooseImage: {
+    position: 'relative',
+    backgroundColor: '#ccc',
+    width: '70%',
+    marginHorizontal: '15%',
+    marginVertical: '3%',
+    height: '40%',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    borderColor: theme.colors.black,
     justifyContent: 'center',
   },
 });

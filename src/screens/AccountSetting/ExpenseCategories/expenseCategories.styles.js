@@ -4,7 +4,6 @@ import theme from '../../../config/theme';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
     paddingHorizontal: 10,
     justifyContent: 'center',
     position: 'relative',

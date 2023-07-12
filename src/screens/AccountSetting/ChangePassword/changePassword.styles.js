@@ -3,7 +3,6 @@ import theme from '../../../config/theme';
 
 const styles = StyleSheet.create({
   wrapper: {
-    backgroundColor: '#000',
     flexDirection: 'column',
     flex: 1,
   },
@@ -16,6 +15,11 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSizes.text_body,
     color: theme.colors.black,
     textAlign: 'center',
+  },
+  errorText: {
+    color: 'red',
+    marginTop: 10,
+    marginLeft: '10%',
   },
 });
 

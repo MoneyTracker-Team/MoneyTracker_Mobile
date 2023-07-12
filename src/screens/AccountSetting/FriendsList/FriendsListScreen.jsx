@@ -1,26 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   View,
   Text,
-  Button,
-  Image,
+  ImageBackground,
   TouchableOpacity,
   FlatList,
   Modal,
   TextInput,
   Keyboard,
-  ScrollView,
+  Image,
 } from 'react-native';
+import background from '../../../../assets/bg-img.png';
 import styles from './friendsList.styles.js';
 import FriendWithAccount from './FriendWithAccount/FriendWithAccount.jsx';
 import FriendWithoutAccount from './FriendWithoutAccount/FriendWithoutAccount.jsx';
 import AccountItem from '../../../components/AccountItem/AccountItem.component.js';
-import friendWithAccount from '../../../static/friendWithAccount.js';
-import friendWithoutAccount from '../../../static/friendWithoutAccount.js';
-import account from '../../../static/account.js';
+// import account from '../../../static/account.js';
 import Ionicons from 'react-native-vector-icons/Ionicons.js';
+import { AuthContext } from '../../../context/AuthContext/AuthContext';
+import * as ImagePicker from 'expo-image-picker';
 
 function FriendsListScreen({ navigation }) {
+  const userId = useContext(AuthContext).userId;
+  const [friendData, setFriendData] = useState([]);
+  const [friendWithAccount, setFriendWithAccount] = useState([]);
+  const [friendWithoutAccount, setFriendWithoutAccount] = useState([]);
+  const [base64Image, setBase64Image] = useState('');
+  const [image, setImage] = useState(null);
+  const [rerender, setRerender] = useState(true);
+  const [notFriendList, setNotFriendList] = useState([]);
   useEffect(() => {
     navigation.getParent().setOptions({ tabBarStyle: { display: 'none' } });
     return () => {
@@ -34,30 +42,138 @@ function FriendsListScreen({ navigation }) {
     const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
       setKeyboardStatus('');
     });
-
     return () => {
       showSubscription.remove();
       hideSubscription.remove();
     };
   }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const url = `https://moneytrackerserver-production.up.railway.app/friends/all-of-user/${userId}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        setFriendData(data.data.friends);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [rerender]);
+
+  const { friendWithAccountList, friendWithoutAccountList } = friendData.reduce(
+    (result, friend) => {
+      const { friendId, ...rest } = friend;
+      if (friendId) {
+        result.friendWithAccountList.push(rest);
+      } else {
+        result.friendWithoutAccountList.push(rest);
+      }
+      return result;
+    },
+    { friendWithAccountList: [], friendWithoutAccountList: [] },
+  );
+
+  useEffect(() => {
+    setFriendWithAccount(friendWithAccountList);
+    setFriendWithoutAccount(friendWithoutAccountList);
+  }, [friendData]);
+
+  useEffect(() => {
+    setNotFriendList(notFriendList);
+  }, [notFriendList]);
+
   const [inputValue, setInputValue] = useState('');
   const handleInputChange = (text) => {
     setInputValue(text);
   };
 
   const [inputSearchValue, setInputSearchValue] = useState('');
-  const [filteredAccount, setFilteredAccount] = useState(account);
+  const [filteredAccount, setFilteredAccount] = useState(notFriendList);
   const handleInputSearchChange = (text) => {
     setInputSearchValue(text);
-    const filtered = account.filter((item) => item.name.toLowerCase().includes(text.toLowerCase()));
+    let filtered = [];
+    if (notFriendList.length > 0) {
+      filtered = notFriendList.filter((item) => item.name.toLowerCase().includes(text.toLowerCase()));
+    }
     setFilteredAccount(filtered);
   };
-  const onSave = () => {
-    // Call API Save here
+
+  function getCharactersAfterLastDot(str) {
+    const lastDotIndex = str.lastIndexOf('.');
+    if (lastDotIndex !== -1 && lastDotIndex < str.length - 1) {
+      return str.substring(lastDotIndex + 1);
+    }
+    return '';
+  }
+
+  const openImagePicker = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+      base64: true,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+      const charactersAfterLastDot = getCharactersAfterLastDot(result.assets[0].uri);
+      setBase64Image('data:image/' + charactersAfterLastDot + ';base64,' + result.assets[0].base64);
+    }
+  };
+
+  const onSave = async () => {
+    if (inputValue !== '') {
+      if (base64Image) {
+        try {
+          const response = await fetch(
+            `https://moneytrackerserver-production.up.railway.app/friends/create/${userId}`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                isTemporaty: false,
+                name: inputValue,
+                image: base64Image,
+              }),
+            },
+          );
+          const data = await response.json();
+          setRerender(!rerender);
+          setShowModal(false);
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        try {
+          const response = await fetch(
+            `https://moneytrackerserver-production.up.railway.app/friends/create/${userId}`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                isTemporaty: false,
+                name: inputValue,
+              }),
+            },
+          );
+          const data = await response.json();
+          setRerender(!rerender);
+          setShowModal(false);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
     setShowModal(false);
   };
   const [showModal, setShowModal] = useState(false);
-  const openModal = (item) => {
+  const openModal = () => {
     setShowModal(true);
   };
   const closeModal = () => {
@@ -65,44 +181,51 @@ function FriendsListScreen({ navigation }) {
   };
   const [keyboardStatus, setKeyboardStatus] = useState('');
 
-  const addFriend = () => {
-    openModal();
-  };
-
   const [showAddFriendWithAccountModal, setShowAddFriendWithAccountModal] = useState(false);
-  const openAddFriendWithAccountnModal = (item) => {
+  const openAddFriendWithAccountnModal = () => {
     setShowAddFriendWithAccountModal(true);
   };
   const closeAddFriendWithAccountModal = () => {
     setInputSearchValue('');
-    setFilteredAccount(account);
+    setFilteredAccount(notFriendList);
     setShowAddFriendWithAccountModal(false);
   };
 
   const addFriendWithAccount = () => {
+    const fetchData1 = async () => {
+      try {
+        const url = `https://moneytrackerserver-production.up.railway.app/users/user-not-friend/${userId}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        setNotFriendList(data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData1();
     openAddFriendWithAccountnModal();
   };
 
   const renderItem1 = ({ item, index }) => {
     return (
       <View key={index}>
-        <FriendWithoutAccount data={item} />
+        <FriendWithoutAccount data={item} rerender={rerender} setRerender={setRerender} />
       </View>
     );
   };
   const renderItem2 = ({ item, index }) => {
     return (
       <View key={index}>
-        <FriendWithAccount data={item} />
+        <FriendWithAccount data={item} rerender={rerender} setRerender={setRerender} />
       </View>
     );
   };
   return (
-    <View style={styles.wrapper}>
+    <ImageBackground source={background} style={styles.wrapper}>
       <View style={styles.listFriendWithoutAccount}>
         <View style={styles.header}>
           <Text style={styles.title}>Không có tài khoản</Text>
-          <TouchableOpacity style={styles.btnAdd} onPress={addFriend}>
+          <TouchableOpacity style={styles.btnAdd} onPress={openModal}>
             <Text style={styles.textAddFriend}>Thêm</Text>
           </TouchableOpacity>
         </View>
@@ -131,6 +254,22 @@ function FriendsListScreen({ navigation }) {
                 onChangeText={handleInputChange}
                 placeholder="Enter text here"
               />
+              <Text style={styles.modalLabel}>Ảnh đại diện:</Text>
+              {!image && (
+                <View style={styles.chooseImage}>
+                  <TouchableOpacity style={styles.chooseImageBtn} onPress={openImagePicker}>
+                    <Ionicons style={styles.action_icon_1} name="camera-outline" size={30} />
+                  </TouchableOpacity>
+                </View>
+              )}
+              {image && (
+                <View style={styles.choosedImage}>
+                  <TouchableOpacity style={styles.chooseImageBtn} onPress={openImagePicker}>
+                    <Ionicons style={styles.action_icon_1} name="camera-outline" size={30} />
+                  </TouchableOpacity>
+                  <Image source={{ uri: image }} style={styles.image} />
+                </View>
+              )}
               <TouchableOpacity style={styles.btnSave} onPress={onSave}>
                 <Text style={styles.textAddNew}>Tạo mới</Text>
               </TouchableOpacity>
@@ -161,21 +300,28 @@ function FriendsListScreen({ navigation }) {
                   placeholder="Tìm kiếm bạn bè"
                 />
               </View>
-              <FlatList
-                style={{ width: '100%', marginVertical: '2%', marginRight: '9%' }}
-                data={filteredAccount}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item, index }) => (
-                  <View style={styles.centeredComponent}>
-                    <AccountItem data={item} />
-                  </View>
-                )}
-              />
+              {notFriendList.length > 0 && (
+                <FlatList
+                  style={{ width: '100%', marginVertical: '2%', marginRight: '9%' }}
+                  data={filteredAccount}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item, index }) => (
+                    <View style={styles.centeredComponent}>
+                      <AccountItem
+                        data={item}
+                        rerender={rerender}
+                        setRerender={setRerender}
+                        setShowAddFriendWithAccountModal={setShowAddFriendWithAccountModal}
+                      />
+                    </View>
+                  )}
+                />
+              )}
             </View>
           </View>
         </View>
       </Modal>
-    </View>
+    </ImageBackground>
   );
 }
 

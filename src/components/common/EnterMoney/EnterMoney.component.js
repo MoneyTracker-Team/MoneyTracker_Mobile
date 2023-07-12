@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import styles from './EnterMoney.style';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const EnterMoney = (props) => {
-  const { title, modalState } = props;
-
+  const { title, modalState, placeholder } = props;
+  const [amountMoney, setAmountMoney] = useState('');
   return (
     <SafeAreaView>
       <ScrollView>
@@ -18,8 +18,10 @@ const EnterMoney = (props) => {
           <TextInput
             style={styles.input_money}
             textAlign="center"
-            inputMode="numeric"
-            placeholder="Nhập số tiền"
+            inputMode={title !== 'Nhập ghi chú' ? 'numeric' : 'text'}
+            placeholder={placeholder}
+            value={amountMoney}
+            onChangeText={setAmountMoney}
           ></TextInput>
           <View style={styles.button_container}>
             <TouchableOpacity style={styles.cancel_button} onPress={() => modalState(false)}>

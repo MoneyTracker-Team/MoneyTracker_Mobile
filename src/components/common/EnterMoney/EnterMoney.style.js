@@ -5,7 +5,7 @@ import theme from '../../../config/theme';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginVertical: '67%',
+    marginVertical: '30%',
     marginHorizontal: '8%',
     paddingBottom: 28,
     backgroundColor: theme.colors.white,

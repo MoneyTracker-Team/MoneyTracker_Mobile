@@ -1,11 +1,18 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect, useContext, useState } from 'react';
+import { View, Text, Image, TouchableOpacity, ImageBackground } from 'react-native';
 import styles from './accountSetting.styles.js';
 import Ionicons from 'react-native-vector-icons/Ionicons.js';
-import account from '../../static/account.js';
+import background from '../../../assets/bg-img.png';
+import { AuthContext } from '../../context/AuthContext/AuthContext.js';
 const AccountSettingScreen = ({ navigation }) => {
+  const userId = useContext(AuthContext).userId;
+  const [userData, setUserData] = useState({});
+  const [rerender, setRerender] = useState(true);
   const handlePressPersonalAccount = () => {
-    navigation.navigate('PersonalAccount'); // chuyển đến màn hình Tài khoản cá nhân
+    navigation.navigate('PersonalAccount', {
+      rerender: rerender,
+      setRerender: setRerender,
+    }); // chuyển đến màn hình Tài khoản cá nhân
   };
   const handlePressChangePassword = () => {
     navigation.navigate('ChangePassword'); // chuyển đến màn hình Thay đổi mật khẩu
@@ -30,18 +37,33 @@ const AccountSettingScreen = ({ navigation }) => {
   const handlePressAbout = () => {
     navigation.navigate('About'); // chuyển đến màn hình Thông tin về ứng dụng
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const url = `https://moneytrackerserver-production.up.railway.app/users/${userId}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        setUserData(data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [rerender]);
   return (
-    <View style={styles.wrapper}>
-      {/* Header here */}
+    <ImageBackground source={background} style={styles.wrapper}>
       <View style={styles.user_info_container}>
-        <Image
-          style={styles.image}
-          source={{
-            uri: account[5].avatar,
-          }}
-        />
-        <Text style={styles.fullname}>{account[5].name}</Text>
-        <Text style={styles.money}>2.000.000 vnđ</Text>
+        {userData?.avatar && (
+          <Image
+            style={styles.image}
+            source={{
+              uri: userData?.avatar,
+            }}
+          />
+        )}
+        <Text style={styles.fullname}>{userData?.name}</Text>
+        <Text style={styles.money}>{userData?.currentMoney} vnđ</Text>
       </View>
       <View style={styles.list_action}>
         <TouchableOpacity style={styles.actionBtn} onPress={handlePressPersonalAccount}>
@@ -94,7 +116,7 @@ const AccountSettingScreen = ({ navigation }) => {
           </View>
         </TouchableOpacity>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 

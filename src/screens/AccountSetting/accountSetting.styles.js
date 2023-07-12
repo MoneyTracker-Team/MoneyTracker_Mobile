@@ -3,14 +3,13 @@ import theme from '../../config/theme';
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: '#000',
   },
   user_info_container: {
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
     height: '33%',
-    backgroundColor: '#214c31',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
   },
   image: {
     alignSelf: 'center',

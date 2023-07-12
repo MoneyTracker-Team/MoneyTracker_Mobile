@@ -1,12 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Keyboard, TextInput, Pressable } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, TouchableOpacity, Keyboard, TextInput, Pressable, ImageBackground } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons.js';
 import styles from './changePassword.styles.js';
 import theme from '../../../config/theme';
+import background from '../../../../assets/bg-img.png';
 import PasswordInput from './PasswordInput/PasswordInput.jsx';
+import { AuthContext } from '../../../context/AuthContext/AuthContext.js';
 
 function ChangePasswordScreen({ navigation }) {
-  const [currentPassword, setCurrentPassword] = useState('123abc');
+  const userId = useContext(AuthContext).userId;
+  const [errorMessage, setErrorMessage] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [formReady, setFormReady] = useState(false);
@@ -34,17 +38,41 @@ function ChangePasswordScreen({ navigation }) {
       setFormReady(false);
     };
   }, [currentPassword, newPassword, confirmPassword]);
-  const onSave = () => {
+  const onSave = async () => {
     if (formReady) {
       //Call API  Check password here
       if (newPassword === confirmPassword && newPassword.length > 5) {
-        // Call API save here
-        navigation.navigate('AccountSetting'); // chuyển đến màn hình Cài đặt
+        try {
+          const response = await fetch(
+            `https://moneytrackerserver-production.up.railway.app/users/update-pass/${userId}`,
+            {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                oldPassword: currentPassword,
+                newPassword: newPassword,
+              }),
+            },
+          );
+          const data = await response.json();
+          if (data.status === 200 || data.status === 201) {
+            setErrorMessage('');
+            navigation.navigate('AccountSetting');
+          } else {
+            setErrorMessage('Đổi mật khẩu thất bại!');
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        setErrorMessage('Đổi mật khẩu thất bại!');
       }
     }
   };
   return (
-    <View style={styles.wrapper}>
+    <ImageBackground source={background} style={styles.wrapper}>
       <View style={{ flex: 1 }}>
         <PasswordInput
           label="Mật khẩu hiện tại"
@@ -65,6 +93,7 @@ function ChangePasswordScreen({ navigation }) {
           onChangeText={setConfirmPassword}
         />
       </View>
+      {errorMessage !== '' && <Text style={styles.errorText}>{errorMessage}</Text>}
       {keyboardStatus == '' && (
         <Pressable
           onPress={onSave}
@@ -83,7 +112,7 @@ function ChangePasswordScreen({ navigation }) {
           </Text>
         </Pressable>
       )}
-    </View>
+    </ImageBackground>
   );
 }
 
