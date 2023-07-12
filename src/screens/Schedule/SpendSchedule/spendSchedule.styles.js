@@ -4,7 +4,6 @@ import theme from '../../../config/theme';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black',
   },
   money_amount_container: {
     margin: '5%',
