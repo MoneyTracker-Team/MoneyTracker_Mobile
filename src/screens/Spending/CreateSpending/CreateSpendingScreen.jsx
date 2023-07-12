@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   View,
   Text,
@@ -22,8 +22,10 @@ import * as ImagePicker from 'expo-image-picker';
 import EditMoney from '../../../components/common/EditMoney/EditMoney.component.js';
 import theme from '../../../config/theme.js';
 import background from '../../../../assets/bg-img.png';
-
+import { AuthContext } from '../../../context/AuthContext/AuthContext.js';
 const CreateSpendingScreen = ({ navigation }) => {
+  const userId = useContext(AuthContext).userId;
+
   useEffect(() => {
     navigation.getParent().setOptions({ tabBarStyle: { display: 'none' } });
     return () => {
@@ -39,7 +41,7 @@ const CreateSpendingScreen = ({ navigation }) => {
     const fetchData = async () => {
       try {
         const response1 = await fetch(
-          'https://moneytrackerserver-production.up.railway.app/type-spends/all-of-user/6476fc3968a24efaacf90dc6',
+          `https://moneytrackerserver-production.up.railway.app/type-spends/all-of-user/${userId}`,
           {
             method: 'GET',
             headers: {
@@ -51,7 +53,7 @@ const CreateSpendingScreen = ({ navigation }) => {
         setListSpendingType(data.data.typeSpends);
 
         const response2 = await fetch(
-          'https://moneytrackerserver-production.up.railway.app/friends/all-of-user/6476fc3968a24efaacf90dc6',
+          `https://moneytrackerserver-production.up.railway.app/friends/all-of-user/${userId}`,
           {
             method: 'GET',
             headers: {
@@ -258,7 +260,7 @@ const CreateSpendingScreen = ({ navigation }) => {
       ]);
     } else {
       const newSpending = {
-        userId: '6476fc3968a24efaacf90dc6',
+        userId: userId,
         typeId: spendingType._id,
         moneySpend,
         dateTime: `${selectedDay}${time.toISOString().substring(10)}`,

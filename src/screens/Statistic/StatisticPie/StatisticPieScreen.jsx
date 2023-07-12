@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, Button, SafeAreaView, TouchableOpacity, Dimensions, ImageBackground } from 'react-native';
 import styles from './statisticPie.styles.js';
 import ScreenTab from '../../../components/ScreenTab/ScreenTab.component.js';
@@ -7,8 +7,11 @@ import moment from 'moment';
 import { BarChart, PieChart } from 'react-native-chart-kit';
 import background from '../../../../assets/bg-img.png';
 import theme from '../../../config/theme.js';
+import { AuthContext } from '../../../context/AuthContext/AuthContext.js';
 
 const StatisticPieScreen = ({ navigation }) => {
+  const userId = useContext(AuthContext).userId;
+
   const listTab = [
     { status: 'pie', title: 'Theo danh mục' },
     { status: 'column', title: 'Theo lượng chi tiêu' },
@@ -36,7 +39,7 @@ const StatisticPieScreen = ({ navigation }) => {
     const fetchData = async () => {
       try {
         const response1 = await fetch(
-          `https://moneytrackerserver-production.up.railway.app/spends/pie-chart/6476fc3968a24efaacf90dc6?month=${
+          `https://moneytrackerserver-production.up.railway.app/spends/pie-chart/${userId}?month=${
             currentMonth.getMonth() + 1
           }&year=${currentMonth.getFullYear()}`,
           {
@@ -50,7 +53,7 @@ const StatisticPieScreen = ({ navigation }) => {
         setListSpendingTypeSpend(data.data);
 
         const response2 = await fetch(
-          `https://moneytrackerserver-production.up.railway.app/spends/schedule-in-month/6476fc3968a24efaacf90dc6?month=${
+          `https://moneytrackerserver-production.up.railway.app/spends/schedule-in-month/${userId}?month=${
             currentMonth.getMonth() + 1
           }&year=${currentMonth.getFullYear()}`,
           {

@@ -25,7 +25,7 @@ const DebtItem = ({ item }) => {
               { backgroundColor: item.status === 'debt' ? theme.colors.tertiary : theme.colors.light_primary },
             ]}
           >
-            <Text style={styles.moneyAmount}>{item.moneySpend / 1000}k</Text>
+            <Text style={styles.moneyAmount}>{formatNumber(item.moneySpend ? item.moneySpend / 1000 : 0)}K</Text>
           </View>
         </View>
         <View style={styles.noteContainer}>

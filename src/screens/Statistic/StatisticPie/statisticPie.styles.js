@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   statistic_container: {
-    height: '75%',
+    flex: 1,
     marginTop: '4%',
     alignItems: 'center',
     justifyContent: 'center',
@@ -25,7 +25,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    paddingVertical: '8%',
+    marginBottom: 20,
+    paddingVertical: 15,
+    flexShrink: 0,
   },
   select_month_text: {
     fontSize: theme.fontSizes.text_body,

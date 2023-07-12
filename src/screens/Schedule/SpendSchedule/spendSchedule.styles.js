@@ -56,15 +56,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    paddingVertical: '8%',
-    marginTop: '10%',
+    marginVertical: '7%',
+    paddingVertical: 15,
+    flexShrink: 0,
+    flex: 1,
   },
   select_month_text: {
     fontSize: theme.fontSizes.text_body,
     color: theme.colors.white,
   },
   create_spend_schedule_container: {
-    marginTop: '10%',
     alignItems: 'center',
   },
   create_spend_schedule_button: {

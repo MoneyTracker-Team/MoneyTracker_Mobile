@@ -110,12 +110,12 @@ function LoansScreen({ navigation }) {
       {status !== 'payment' && (
         <FlatList data={debtLoanList} keyExtractor={(e, i) => i.toString()} renderItem={renderDebtItem} />
       )}
-      {status === 'debt' && (
+      {status === true && (
         <TouchableOpacity style={styles.btnAddNewdebtLoan} onPress={handleAddNewdebtLoan}>
           <Text style={styles.textAddNewdebtLoan}>Thêm phiếu nợ</Text>
         </TouchableOpacity>
       )}
-      {status === 'loan' && (
+      {status === false && (
         <TouchableOpacity style={styles.btnAddNewdebtLoan} onPress={handleAddNewdebtLoan}>
           <Text style={styles.textAddNewdebtLoan}>Thêm phiếu cho nợ</Text>
         </TouchableOpacity>

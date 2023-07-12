@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, TouchableOpacity, Modal, Alert, ImageBackground } from 'react-native';
 import styles from './spendSchedule.styles.js';
 import SpendDetail from '../../../components/common/SpendDetail/SpendDetail.component.js';
@@ -8,8 +8,11 @@ import theme from '../../../config/theme.js';
 import moment from 'moment';
 import background from '../../../../assets/bg-img.png';
 import { MaterialIcons } from '@expo/vector-icons';
-
+import formatNumber from '../../../utils/formatNumber.js';
+import { AuthContext } from '../../../context/AuthContext/AuthContext.js';
 const SpendScheduleScreen = ({ navigation }) => {
+  const userId = useContext(AuthContext).userId;
+
   useEffect(() => {
     navigation.getParent().setOptions({ tabBarStyle: { display: 'none' } });
     return () => {
@@ -26,7 +29,7 @@ const SpendScheduleScreen = ({ navigation }) => {
 
   useEffect(() => {
     fetch(
-      `https://moneytrackerserver-production.up.railway.app/spends/schedule-in-month/6476fc3968a24efaacf90dc6?month=${
+      `https://moneytrackerserver-production.up.railway.app/spends/schedule-in-month/${userId}?month=${
         currentMonth.getMonth() + 1
       }&year=${currentMonth.getFullYear()}`,
     )
@@ -101,7 +104,7 @@ const SpendScheduleScreen = ({ navigation }) => {
         ]);
       } else {
         const newSchedule = {
-          userId: '6476fc3968a24efaacf90dc6',
+          userId: userId,
           month: currentMonth.getMonth() + 1,
           year: currentMonth.getFullYear(),
           scheduleMoney,
@@ -157,15 +160,27 @@ const SpendScheduleScreen = ({ navigation }) => {
         </View>
         <View style={styles.detail_container}>
           <SpendDetail
-            value1={Object.keys(currentSchedule).length === 0 ? '0K' : `${currentSchedule.remainingMoney / 1000}K`}
+            value1={
+              Object.keys(currentSchedule).length === 0
+                ? '0K'
+                : `${formatNumber(currentSchedule.remainingMoney ? currentSchedule.remainingMoney / 1000 : 0)}K`
+            }
             desc1="Tiền còn lại"
             value2={Object.keys(currentSchedule).length === 0 ? '0' : `${currentSchedule.remainingDate}`}
             desc2="Ngày còn lại"
-            value3={Object.keys(currentSchedule).length === 0 ? '0K' : `${currentSchedule.fixedMoney / 1000}K`}
+            value3={
+              Object.keys(currentSchedule).length === 0
+                ? '0K'
+                : `${formatNumber(currentSchedule.fixedMoney ? currentSchedule.fixedMoney / 1000 : 0)}K`
+            }
             desc3="Các khoản cố định"
             backgroundColor3={theme.colors.tertiary}
             textColor3={theme.colors.white}
-            value4={Object.keys(currentSchedule).length === 0 ? '0K' : `${currentSchedule.totalSpended / 1000}K`}
+            value4={
+              Object.keys(currentSchedule).length === 0
+                ? '0K'
+                : `${formatNumber(currentSchedule.totalSpended ? currentSchedule.totalSpended / 1000 : 0)}K`
+            }
             desc4="Đã tiêu hết"
           />
         </View>

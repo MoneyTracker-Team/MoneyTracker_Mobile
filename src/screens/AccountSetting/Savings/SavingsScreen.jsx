@@ -7,12 +7,14 @@ import EnterMoney from '../../../components/common/EnterMoney/EnterMoney.compone
 import DisplayMoney from '../../../components/common/DisplayMoney/DisplayMoney.component.js';
 import moment from 'moment';
 import { AuthContext } from '../../../context/AuthContext/AuthContext.js';
+import formatNumber from '../../../utils/formatNumber.js';
 function SavingsScreen({ navigation }) {
   const userId = useContext(AuthContext).userId;
-  const [currentMoney, setCurrentMoney] = useState();
+  const [currentMoney, setCurrentMoney] = useState(0);
   const [modalAddMoney, setModalAddMoney] = useState(false);
   const [modalSubMoney, setModalSubMoney] = useState(false);
   const [savingsData, setSavingsData] = useState([]);
+  const [scheduleMoney, setScheduleMoney] = useState(0);
 
   useEffect(() => {
     navigation.getParent().setOptions({ tabBarStyle: { display: 'none' } });
@@ -33,6 +35,38 @@ function SavingsScreen({ navigation }) {
       navigation.getParent().setOptions({ tabBarStyle: { display: 'flex' } });
     };
   }, []);
+
+  useEffect(() => {
+    if (Object.keys(savingsData).length !== 0 && scheduleMoney !== 0) {
+      const updatedScheduleMoney = {
+        displace: scheduleMoney,
+      };
+      fetch(`https://moneytrackerserver-production.up.railway.app/users/update-current-money/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedScheduleMoney),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setCurrentMoney(scheduleMoney + currentMoney);
+          const updateData = [
+            {
+              ajustMoney: data.data.historyAdjustMoney.ajustMoney,
+              createdAt: data.data.historyAdjustMoney.createdAt,
+            },
+            ...savingsData,
+          ];
+          setSavingsData([...updateData]);
+          setScheduleMoney(0);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [scheduleMoney]);
+
   return (
     <ImageBackground source={background} style={styles.wrapper}>
       <View style={styles.money_amount_wrapper}>
@@ -53,12 +87,22 @@ function SavingsScreen({ navigation }) {
       </View>
       <Modal transparent={true} visible={modalAddMoney} animationType="fade">
         <View style={styles.modal_container}>
-          <EnterMoney title="Thêm tiền tiết kiệm" modalState={setModalAddMoney}></EnterMoney>
+          <EnterMoney
+            title="Thêm tiền tiết kiệm"
+            modalState={setModalAddMoney}
+            scheduleMoney={scheduleMoney}
+            setScheduleMoney={setScheduleMoney}
+          ></EnterMoney>
         </View>
       </Modal>
       <Modal transparent={true} visible={modalSubMoney} animationType="fade">
         <View style={styles.modal_container}>
-          <EnterMoney title="Giảm tiền tiết kiệm" modalState={setModalSubMoney}></EnterMoney>
+          <EnterMoney
+            title="Giảm tiền tiết kiệm"
+            modalState={setModalSubMoney}
+            scheduleMoney={scheduleMoney}
+            setScheduleMoney={setScheduleMoney}
+          ></EnterMoney>
         </View>
       </Modal>
       <Text style={{ fontSize: theme.fontSizes.text_body, color: theme.colors.white, margin: '3%' }}>
@@ -86,7 +130,7 @@ function SavingsScreen({ navigation }) {
                       fontSize: theme.fontSizes.text_body,
                     }}
                   >
-                    {item.ajustMoney} vnđ
+                    {formatNumber(item.ajustMoney ? item.ajustMoney : 0)} vnđ
                   </Text>
                   <Text
                     style={{

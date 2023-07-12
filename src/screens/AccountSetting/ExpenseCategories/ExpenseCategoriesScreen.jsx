@@ -66,7 +66,12 @@ function ExpenseCategoriesScreen({ navigation }) {
         <View style={styles.itemBody}>
           <Text style={styles.itemName}>{item.name}</Text>
         </View>
-        <Ionicons style={styles.action_icon} name="settings-outline" size={24} onPress={() => openModal(item)} />
+        <Ionicons
+          style={[styles.action_icon, { opacity: item.isDefault ? 0 : 1 }]}
+          name="settings-outline"
+          size={24}
+          onPress={() => openModal(item)}
+        />
       </View>
     );
   };
@@ -86,13 +91,16 @@ function ExpenseCategoriesScreen({ navigation }) {
   const [showModal, setShowModal] = useState(false);
   const openModal = (item) => {
     if (item !== null) {
-      setSelectedItem(item);
-      setImage(item.image);
-      setInputValue(item.name);
+      if (!item.isDefault) {
+        setSelectedItem(item);
+        setImage(item.image);
+        setInputValue(item.name);
+        setShowModal(true);
+      }
     } else {
       setImage(null);
+      setShowModal(true);
     }
-    setShowModal(true);
   };
   const onSave = async () => {
     if (selectedItem) {
@@ -196,6 +204,9 @@ function ExpenseCategoriesScreen({ navigation }) {
     }
   };
   const closeModal = () => {
+    setSelectedItem(null);
+    setImage(null);
+    setInputValue(null);
     setShowModal(false);
   };
   const [keyboardStatus, setKeyboardStatus] = useState('');

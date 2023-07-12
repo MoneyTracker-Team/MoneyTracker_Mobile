@@ -4,7 +4,7 @@ import background from '../../../../../assets/bg-img.png';
 import theme from '../../../../config/theme.js';
 import { useRoute } from '@react-navigation/native';
 import styles from './debtDetailScreen.styles';
-
+import formatNumber from '../../../../utils/formatNumber';
 const DebtDetailScreen = ({ navigation }) => {
   const route = useRoute();
   const { debtId } = route.params;
@@ -70,7 +70,9 @@ const DebtDetailScreen = ({ navigation }) => {
             { backgroundColor: debtDetailData?.isDebt === true ? theme.colors.tertiary : theme.colors.light_primary },
           ]}
         >
-          <Text style={styles.moneyAmount}>{debtDetailData?.moneySpend / 1000}k</Text>
+          <Text style={styles.moneyAmount}>
+            {formatNumber(debtDetailData?.moneySpend ? debtDetailData?.moneySpend / 1000 : 0)}K
+          </Text>
         </View>
       </View>
       <View style={styles.imageContainer}>

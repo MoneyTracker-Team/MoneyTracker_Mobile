@@ -6,7 +6,7 @@ import theme from '../../../../config/theme.js';
 import styles from './paymentScreen.styles.js';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { AuthContext } from '../../../../context/AuthContext/AuthContext';
-
+import formatNumber from '../../../../utils/formatNumber';
 const PaymentScreen = ({ navigation, route }) => {
   const userId = useContext(AuthContext).userId;
   const [debtAccountData, setDebtAccountData] = useState({});
@@ -94,7 +94,7 @@ const PaymentScreen = ({ navigation, route }) => {
         <Text style={styles.textPayment}>
           Thanh toán
           <Text style={debtAccountData?.checkoutMoney > 0 ? styles.positiveAmount : styles.negativeAmount}>
-            {debtAccountData?.checkoutMoney / 1000}k
+            {formatNumber(debtAccountData?.checkoutMoney ? debtAccountData?.checkoutMoney / 1000 : 0)}K
           </Text>
         </Text>
       </TouchableOpacity>

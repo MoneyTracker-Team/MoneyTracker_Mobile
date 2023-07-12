@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     width: '35%',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: '8%',
+    marginTop: 15,
     marginLeft: '50%',
   },
   btn_create_text: {

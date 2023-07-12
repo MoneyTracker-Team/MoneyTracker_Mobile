@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Image } from 'react-native';
 import styles from './debtAccountItem.styles.js';
 import theme from '../../../../config/theme.js';
+import formatNumber from '../../../../utils/formatNumber.js';
 
 const DebtAccountItem = ({ item }) => {
   return (
@@ -19,10 +20,10 @@ const DebtAccountItem = ({ item }) => {
             <Text style={styles.isFriendText}>Bạn bè</Text>
           </View>
           <View style={[styles.moneyContainer, { backgroundColor: theme.colors.tertiary }]}>
-            <Text style={styles.moneyAmount}>{item.totalDebt / 1000}k</Text>
+            <Text style={styles.moneyAmount}>{formatNumber(item.totalDebt ? item.totalDebt / 1000 : 0)}K</Text>
           </View>
           <View style={[styles.moneyContainer, { backgroundColor: theme.colors.light_primary }]}>
-            <Text style={styles.moneyAmount}>{item.totalLoan / 1000}k</Text>
+            <Text style={styles.moneyAmount}>{formatNumber(item.totalLoan ? item.totalLoan / 1000 : 0)}K</Text>
           </View>
         </View>
       </View>

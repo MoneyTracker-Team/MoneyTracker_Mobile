@@ -7,7 +7,7 @@ import OneDaySpending from '../../../components/common/OneDaySpending/OneDaySpen
 import SpendDetail from '../../../components/common/SpendDetail/SpendDetail.component.js';
 import DateInMonth from '../../../components/common/DateInMonth/DateInMonth.component.js';
 import background from '../../../../assets/bg-img.png';
-
+import formatNumber from '../../../utils/formatNumber.js';
 const ScheduleDetailScreen = ({ navigation, route }) => {
   const { month, year, currentSchedule } = route.params;
 
@@ -100,7 +100,9 @@ const ScheduleDetailScreen = ({ navigation, route }) => {
         <View style={styles.overview_container}>
           <Text style={styles.overview_title_text}>Dự định chi tiêu tháng này</Text>
           <Text style={styles.overview_money_text}>
-            {Object.keys(currentSchedule).length === 0 ? '0K' : `${currentSchedule.scheduleMoney / 1000}K`}
+            {Object.keys(currentSchedule).length === 0
+              ? '0K'
+              : `${formatNumber(currentSchedule.scheduleMoney ? currentSchedule.scheduleMoney / 1000 : 0)}K`}
           </Text>
           <View style={styles.overview_desc_container}>
             <Feather name="chevrons-down" size={16} color={theme.colors.tertiary} />
@@ -126,8 +128,10 @@ const ScheduleDetailScreen = ({ navigation, route }) => {
                       <OneDaySpending
                         key={date.id}
                         date={`${date.date}/${month + 1}/${year}`}
-                        limitMoney={`${currentSchedule.moneyLimit / 1000}K`}
-                        spentMoney={`${value.spended / 1000}K`}
+                        limitMoney={`${formatNumber(
+                          currentSchedule.moneyLimit ? currentSchedule.moneyLimit / 1000 : 0,
+                        )}K`}
+                        spentMoney={`${formatNumber(value.spended ? value.spended / 1000 : 0)}K`}
                       />
                     );
                   }
@@ -137,7 +141,7 @@ const ScheduleDetailScreen = ({ navigation, route }) => {
                 <OneDaySpending
                   key={date.id}
                   date={`${date.date}/${month + 1}/${year}`}
-                  limitMoney={`${currentSchedule.moneyLimit / 1000}K`}
+                  limitMoney={`${formatNumber(currentSchedule.moneyLimit / 1000)}K`}
                   spentMoney="0K"
                 />
               );
@@ -161,15 +165,23 @@ const ScheduleDetailScreen = ({ navigation, route }) => {
         </View>
         <View style={styles.detail_container}>
           <SpendDetail
-            value1={Object.keys(currentSchedule).length === 0 ? '0K' : `${currentSchedule.remainingMoney / 1000}K`}
+            value1={
+              Object.keys(currentSchedule).length === 0
+                ? '0K'
+                : `${formatNumber(currentSchedule.remainingMoney / 1000)}K`
+            }
             desc1="Tiền còn lại"
             value2={Object.keys(currentSchedule).length === 0 ? '0' : `${currentSchedule.remainingDate}`}
             desc2="Ngày còn lại"
-            value3={Object.keys(currentSchedule).length === 0 ? '0K' : `${currentSchedule.fixedMoney / 1000}K`}
+            value3={
+              Object.keys(currentSchedule).length === 0 ? '0K' : `${formatNumber(currentSchedule.fixedMoney / 1000)}K`
+            }
             desc3="Các khoản cố định"
             backgroundColor3={theme.colors.tertiary}
             textColor3={theme.colors.white}
-            value4={Object.keys(currentSchedule).length === 0 ? '0K' : `${currentSchedule.totalSpended / 1000}K`}
+            value4={
+              Object.keys(currentSchedule).length === 0 ? '0K' : `${formatNumber(currentSchedule.totalSpended / 1000)}K`
+            }
             desc4="Đã tiêu hết"
           />
         </View>
