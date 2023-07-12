@@ -17,6 +17,7 @@ function CalendarScreen() {
   const [spends, setSpends] = useState([]);
   // modal
   const [visibleModal, setVisibleModal] = useState(true);
+  const [spendInDates, setSpendInDates] = useState({});
 
   // ngày đầu tiên tháng hiện tại thuộc thứ mấy trong tuần => [1,2,3,4,5,6,0]
   let firstDayOfMonth = new Date(currYear, currMonth, 1).getDay();
@@ -92,11 +93,16 @@ function CalendarScreen() {
       });
     }
     return qnt > 0 ? (
-      <View style={[styles.quantitySpendWrap, isToday ? styles.bgGreen : '']}>
-        <Text style={styles.quantitySpendText}>{qnt}</Text>
-      </View>
+      <TouchableOpacity style={{ position: 'relative', paddingTop: 12, paddingBottom: 12 }}>
+        <Text style={styles.calendarItemText}>{day}</Text>
+        <View style={[styles.quantitySpendWrap, isToday ? styles.bgGreen : '']}>
+          <Text style={styles.quantitySpendText}>{qnt}</Text>
+        </View>
+      </TouchableOpacity>
     ) : (
-      <></>
+      <View style={{ paddingTop: 12, paddingBottom: 12 }}>
+        <Text style={styles.calendarItemText}>{day}</Text>
+      </View>
     );
   };
 
@@ -114,14 +120,9 @@ function CalendarScreen() {
     for (let i = 1; i <= lastDateOfMonth; i++) {
       let isToday = checkToDay(i, currMonth, currYear);
       dateOfCalendars.push(
-        <TouchableOpacity
-          onPress={() => handleShowSpendInDate(i)}
-          key={'currentdateofmonth' + i}
-          style={[styles.calendarItemWrap, isToday ? styles.todayItemWrap : '']}
-        >
-          <Text style={styles.calendarItemText}>{i}</Text>
+        <View key={'currentdateofmonth' + i} style={[styles.calendarItemWrap, isToday ? styles.todayItemWrap : '']}>
           {renderQntSpendInDate(i)}
-        </TouchableOpacity>,
+        </View>,
       );
     }
     // date of next month
