@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, ImageBackground, Image, ScrollView, Dimensions } from 'react-native';
 import styles from './home.styles.js';
 import bgImg from '../../../assets/bg-img.png';
@@ -7,8 +7,11 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons.js';
 import formatTime from '../../utils/formatTime.js';
 // chart
 import { LineChart } from 'react-native-chart-kit';
+import { AuthContext } from '../../context/AuthContext/AuthContext.js';
 
 const HomeScreen = ({ navigation }) => {
+  const userId = useContext(AuthContext).userId;
+
   const [spends, setSpends] = useState([]);
   const [statistic, setStatistic] = useState('date');
   const [statisticData, setStatisticData] = useState([]);
@@ -21,7 +24,7 @@ const HomeScreen = ({ navigation }) => {
       const year = currDate.getFullYear();
 
       fetch(
-        `https://moneytrackerserver-production.up.railway.app/spends/in-date/6476fc3968a24efaacf90dc6?day=${day}&month=${month}&year=${year}`,
+        `https://moneytrackerserver-production.up.railway.app/spends/in-date/${userId}?day=${day}&month=${month}&year=${year}`,
       )
         .then((response) => response.json())
         .then((result) => {
@@ -36,9 +39,7 @@ const HomeScreen = ({ navigation }) => {
   }, []);
 
   const getStatisticData = async (type) => {
-    return fetch(
-      `https://moneytrackerserver-production.up.railway.app/spends/statistic/6476fc3968a24efaacf90dc6?type=${type}`,
-    )
+    return fetch(`https://moneytrackerserver-production.up.railway.app/spends/statistic/${userId}?type=${type}`)
       .then((response) => response.json())
       .then((result) => {
         return result.data;
