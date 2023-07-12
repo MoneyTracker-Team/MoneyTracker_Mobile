@@ -5,6 +5,7 @@ import bgImg from '../../../assets/bg-img.png';
 import theme from '../../config/theme.js';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons.js';
 import formatTime from '../../utils/formatTime.js';
+import formatNumber from '../../utils/formatNumber.js';
 // chart
 import { LineChart } from 'react-native-chart-kit';
 import { AuthContext } from '../../context/AuthContext/AuthContext.js';
@@ -15,6 +16,7 @@ const HomeScreen = ({ navigation }) => {
   const [spends, setSpends] = useState([]);
   const [statistic, setStatistic] = useState('date');
   const [statisticData, setStatisticData] = useState([]);
+  const [currMoney, setCurrMoney] = useState(0);
 
   useEffect(() => {
     const fetchSpends = async () => {
@@ -35,7 +37,19 @@ const HomeScreen = ({ navigation }) => {
           console.error(error);
         });
     };
+    const fetchCurrMoney = async () => {
+      fetch(`https://moneytrackerserver-production.up.railway.app/users/${userId}`)
+        .then((response) => response.json())
+        .then((result) => {
+          //* set data to state
+          setCurrMoney(result.data?.currentMoney);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
     fetchSpends();
+    fetchCurrMoney();
   }, []);
 
   const getStatisticData = async (type) => {
@@ -113,7 +127,7 @@ const HomeScreen = ({ navigation }) => {
       <View style={{ paddingHorizontal: 20, display: 'flex' }}>
         <Text style={{ color: theme.colors.white, fontSize: theme.fontSizes.text_body }}>Tiền tiết kiệm</Text>
         <Text style={{ color: theme.colors.white, fontSize: theme.fontSizes.headline_one, fontWeight: '500' }}>
-          3.500.000 VND
+          {formatNumber(currMoney)} VND
         </Text>
       </View>
       {/* Bieu do */}
@@ -177,7 +191,12 @@ const HomeScreen = ({ navigation }) => {
                 <View style={styles.spendContent}>
                   <Text style={{ fontWeight: '800', fontSize: 20, marginTop: 6 }}>{spend.name}</Text>
                   <Text style={{ flex: 1, fontSize: theme.fontSizes.text_body }}>{spend.note}</Text>
-                  <Text style={{ alignSelf: 'flex-end', marginRight: 10 }}>{formatTime(spend.dateTime)}</Text>
+                  <View
+                    style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingRight: 10 }}
+                  >
+                    <Text style={{ fontWeight: '500' }}>{formatNumber(spend.moneySpend)} VND</Text>
+                    <Text>{formatTime(spend.dateTime)}</Text>
+                  </View>
                 </View>
               </View>
             ))}
