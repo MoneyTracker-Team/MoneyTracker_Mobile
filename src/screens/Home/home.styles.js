@@ -12,6 +12,33 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
+  // Statistic control btn
+
+  statisticControlWrap: {
+    height: 50,
+    marginHorizontal: 20,
+    borderWidth: 0.5,
+    backgroundColor: '#333',
+    borderColor: 'white',
+    borderRadius: 10,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 10,
+    paddingHorizontal: 4,
+  },
+
+  statisticBtn: {
+    flex: 1,
+    height: '80%',
+    borderRadius: 10,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  // Spend
   spendButtonText: {
     color: theme.colors.white,
     fontSize: 20,

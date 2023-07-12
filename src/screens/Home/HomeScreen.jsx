@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ImageBackground, Image, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ImageBackground, Image, ScrollView, Dimensions } from 'react-native';
 import styles from './home.styles.js';
 import bgImg from '../../../assets/bg-img.png';
 import theme from '../../config/theme.js';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons.js';
 import formatTime from '../../utils/formatTime.js';
+// chart
+import { LineChart } from 'react-native-chart-kit';
 
 const HomeScreen = ({ navigation }) => {
   const [spends, setSpends] = useState([]);
+  const [statistic, setStatistic] = useState('date');
+  const [statisticData, setStatisticData] = useState([]);
 
   useEffect(() => {
     const fetchSpends = async () => {
@@ -31,9 +35,76 @@ const HomeScreen = ({ navigation }) => {
     fetchSpends();
   }, []);
 
+  const getStatisticData = async (type) => {
+    return fetch(
+      `https://moneytrackerserver-production.up.railway.app/spends/statistic/6476fc3968a24efaacf90dc6?type=${type}`,
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        return result.data;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  // fetch data statistic
+  useEffect(() => {
+    const setData = async () => {
+      switch (statistic) {
+        case 'week':
+          const weekData = await getStatisticData('week');
+          // setdata
+          setStatisticData(weekData);
+          break;
+        case 'month':
+          const monthData = await getStatisticData('month');
+          // setData
+          setStatisticData(monthData);
+          break;
+        default:
+          const dayData = await getStatisticData('day');
+          // setData
+          setStatisticData(dayData);
+          break;
+      }
+    };
+    setData();
+  }, [statistic]);
+
+  // chart
+  const data = {
+    datasets: [
+      {
+        data: [0, ...statisticData],
+        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
+        strokeWidth: 2,
+      },
+    ],
+  };
+
+  const screenWidth = Dimensions.get('window').width;
+
+  const chartConfig = {
+    backgroundGradientFrom: '#1E2923',
+    backgroundGradientFromOpacity: 0,
+    backgroundGradientTo: '#08130D',
+    backgroundGradientToOpacity: 0.5,
+    color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+    strokeWidth: 2,
+  };
+
   return (
     <ImageBackground source={bgImg} style={{ height: '100%' }}>
-      <View style={{ padding: 20, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
+      <View
+        style={{
+          paddingHorizontal: 20,
+          paddingTop: 20,
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'flex-end',
+        }}
+      >
         <TouchableOpacity style={styles.spendButton} onPress={() => navigation.navigate('CreateSpending')}>
           <Text style={styles.spendButtonText}>Chi tiền</Text>
         </TouchableOpacity>
@@ -45,9 +116,49 @@ const HomeScreen = ({ navigation }) => {
         </Text>
       </View>
       {/* Bieu do */}
-      <View style={{ height: 230 }}></View>
+      <View style={{ marginTop: 10 }}>
+        {/* Statistic control */}
+        <View style={styles.statisticControlWrap}>
+          <TouchableOpacity
+            onPress={() => setStatistic('date')}
+            style={{
+              ...styles.statisticBtn,
+              backgroundColor: statistic === 'date' ? theme.colors.quaternary : 'transparent',
+            }}
+          >
+            <Text style={{ color: 'white', fontSize: 18, textAlign: 'center' }}>Ngày</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setStatistic('week')}
+            style={{
+              ...styles.statisticBtn,
+              backgroundColor: statistic === 'week' ? theme.colors.quaternary : 'transparent',
+            }}
+          >
+            <Text style={{ color: 'white', fontSize: 18, textAlign: 'center' }}>Tuần</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setStatistic('month')}
+            style={{
+              ...styles.statisticBtn,
+              backgroundColor: statistic === 'month' ? theme.colors.quaternary : 'transparent',
+            }}
+          >
+            <Text style={{ color: 'white', fontSize: 18, textAlign: 'center' }}>Tháng</Text>
+          </TouchableOpacity>
+        </View>
+        {/* Statistic Chart */}
+        <LineChart
+          data={data}
+          width={screenWidth}
+          height={220}
+          chartConfig={chartConfig}
+          withDots={!(statistic === 'month')}
+          bezier
+        />
+      </View>
 
-      <View style={{ display: 'flex', gap: 20 }}>
+      <View style={{ display: 'flex', gap: 20, position: 'relative', top: -20 }}>
         <View style={{ paddingHorizontal: 20 }}>
           <Text style={{ color: theme.colors.white, fontSize: 20 }}> Chi tiêu hôm nay</Text>
         </View>
@@ -72,7 +183,7 @@ const HomeScreen = ({ navigation }) => {
         </ScrollView>
       </View>
 
-      <View style={{ display: 'flex', alignItems: 'center', marginTop: 20 }}>
+      <View style={{ display: 'flex', alignItems: 'center', marginBottom: 10 }}>
         <TouchableOpacity style={styles.scheduleWrapBtn} onPress={() => navigation.navigate('SpendSchedule')}>
           <View style={styles.cicleIconBtn}>
             <MaterialIcons style={{ color: theme.colors.white, fontSize: 24 }} name={'double-arrow'} />
