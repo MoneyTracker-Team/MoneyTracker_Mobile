@@ -13,9 +13,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons.js';
 const dayOfWeeks = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'CN'];
 // ex: 2023-07-08 -> 08-07-2023
 const formatDate = (date) => {
-  let splitDate = date.split('-');
-  reverseDate = splitDate.reverse();
-  return reverseDate.join('-');
+  if (date) {
+    let splitDate = date.split('-');
+    reverseDate = splitDate.reverse();
+    return reverseDate.join('-');
+  }
+  return '';
 };
 
 function CalendarScreen() {
