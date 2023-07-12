@@ -12,6 +12,7 @@ import ScheduleDetailScreen from '../screens/Schedule/ScheduleDetail';
 import CreateSpendingScreen from '../screens/Spending/CreateSpending';
 
 import Calendar from '../screens/SpendHistory/Calendar';
+import UpdateAndDeleteSpend from '../screens/SpendHistory/UpdateAndDeleteSpend';
 
 import StatisticScreen from '../screens/Statistic/StatisticPie';
 
@@ -72,6 +73,11 @@ const StackFromSpendHistoryTag = () => {
       }}
     >
       <Stack.Screen name="Chi tiêu trong tháng" component={Calendar} options={{ headerLeft: () => <></> }} />
+      <Stack.Screen
+        name="UpdateAndDeleteSpend"
+        component={UpdateAndDeleteSpend}
+        options={{ title: 'Chi tiết chi tiêu' }}
+      />
     </Stack.Navigator>
   );
 };
