@@ -23,9 +23,10 @@ import EditMoney from '../../../components/common/EditMoney/EditMoney.component'
 import theme from '../../../config/theme';
 import background from '../../../../assets/bg-img.png';
 import { AuthContext } from '../../../context/AuthContext/AuthContext';
-const UpdateAndDeleteSpend = ({ navigation }) => {
+import formatNumber from '../../../utils/formatNumber';
+const UpdateAndDeleteSpend = ({ navigation, route }) => {
   const userId = useContext(AuthContext).userId;
-
+  const { spendId, rerender, setRerender } = route.params;
   useEffect(() => {
     navigation.getParent().setOptions({ tabBarStyle: { display: 'none' } });
     return () => {
@@ -60,15 +61,12 @@ const UpdateAndDeleteSpend = ({ navigation }) => {
         );
         const data2 = await response2.json();
         setListFriend(data2.data.friends);
-        const response3 = await fetch(
-          'https://moneytrackerserver-production.up.railway.app/spends/64accf122bcec0fe440d0ae7',
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+        const response3 = await fetch(`https://moneytrackerserver-production.up.railway.app/spends/${spendId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        );
+        });
         const data3 = await response3.json();
         setSelectedSpend(data3.data[0]);
       } catch (error) {
@@ -91,7 +89,7 @@ const UpdateAndDeleteSpend = ({ navigation }) => {
   const [locationContent, setLocationContent] = useState('');
 
   useEffect(() => {
-    const selectedTypeSpend = listSpendingType?.filter((spend) => spend._id == selectedSpend.typeId);
+    const selectedTypeSpend = listSpendingType?.filter((spend) => spend._id == selectedSpend?.typeId);
     setMoneySpend(selectedSpend.moneySpend);
     setSpendingType(selectedTypeSpend.length === 0 ? [] : selectedTypeSpend[0]);
     setSelectedDay(selectedSpend.dateTime?.substring(0, 10));
@@ -264,7 +262,7 @@ const UpdateAndDeleteSpend = ({ navigation }) => {
       {
         text: 'Có',
         onPress: async () =>
-          await fetch('https://moneytrackerserver-production.up.railway.app/spends/delete/64accf122bcec0fe440d0ae7', {
+          await fetch(`https://moneytrackerserver-production.up.railway.app/spends/delete/${spendId}`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
@@ -272,6 +270,7 @@ const UpdateAndDeleteSpend = ({ navigation }) => {
           })
             .then((response) => response.json())
             .then((data) => {
+              setRerender(!rerender);
               Alert.alert('Xóa chi tiêu thành công', '', [
                 {
                   text: 'Ok',
@@ -330,7 +329,7 @@ const UpdateAndDeleteSpend = ({ navigation }) => {
         {
           text: 'Có',
           onPress: async () =>
-            await fetch('https://moneytrackerserver-production.up.railway.app/spends/update/64accf122bcec0fe440d0ae7', {
+            await fetch(`https://moneytrackerserver-production.up.railway.app/spends/update/${spendId}`, {
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json',
@@ -339,6 +338,7 @@ const UpdateAndDeleteSpend = ({ navigation }) => {
             })
               .then((response) => response.json())
               .then((data) => {
+                setRerender(!rerender);
                 Alert.alert('Cập nhật chi tiêu thành công', '', [
                   {
                     text: 'Ok',
@@ -360,7 +360,11 @@ const UpdateAndDeleteSpend = ({ navigation }) => {
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.money_amount_container}>
           <View style={styles.money_container}>
-            <EditMoney placeholder="Nhập số tiền" moneySpend={moneySpend} setValue={handleMoneySpend} />
+            <EditMoney
+              placeholder="Nhập số tiền"
+              moneySpend={formatNumber(moneySpend ? moneySpend : 0)}
+              setValue={handleMoneySpend}
+            />
           </View>
           <View style={styles.primary_button_container}>
             <TouchableOpacity style={styles.btn_delete} onPress={deleteSpending}>

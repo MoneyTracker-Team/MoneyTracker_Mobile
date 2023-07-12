@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
   },
   detail_container: {
     marginHorizontal: '7%',
+    flex: 1,
   },
   select_month_container: {
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -59,7 +60,6 @@ const styles = StyleSheet.create({
     marginVertical: '7%',
     paddingVertical: 15,
     flexShrink: 0,
-    flex: 1,
   },
   select_month_text: {
     fontSize: theme.fontSizes.text_body,
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.quaternary,
     alignItems: 'center',
     width: '70%',
-    paddingVertical: '6%',
+    paddingVertical: 20,
     borderRadius: 40,
   },
   create_spend_schedule_text: {

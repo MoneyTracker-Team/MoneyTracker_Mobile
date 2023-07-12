@@ -22,14 +22,15 @@ const formatDate = (date) => {
   return '';
 };
 
-function CalendarScreen() {
+function CalendarScreen({ navigation }) {
+  const [rerender, setRerender] = useState(true);
   const userId = useContext(AuthContext).userId;
   const [currYear, setCurrYear] = useState(new Date().getFullYear());
   const [currMonth, setCurrMonth] = useState(new Date().getMonth());
   const [statisticData, setStatictisData] = useState({});
   const [spends, setSpends] = useState([]);
   // modal
-  const [visibleModal, setVisibleModal] = useState(true);
+  const [visibleModal, setVisibleModal] = useState(false);
   const [spendInDates, setSpendInDates] = useState({});
 
   // ngày đầu tiên tháng hiện tại thuộc thứ mấy trong tuần => [1,2,3,4,5,6,0]
@@ -62,7 +63,7 @@ function CalendarScreen() {
         });
     };
     fetchDataInMonth();
-  }, [currMonth, currYear]);
+  }, [currMonth, currYear, rerender]);
 
   const handlePressPreMonth = () => {
     if (currMonth === 0) {
@@ -170,7 +171,7 @@ function CalendarScreen() {
   const handleShowSpendInDate = async (day) => {
     const data = await fetchSpendInDate(day, currMonth + 1, currYear);
     setSpendInDates(data);
-    setVisibleModal(true);
+    setVisibleModal(!visibleModal);
   };
 
   //* MODAL
@@ -180,7 +181,7 @@ function CalendarScreen() {
 
   const handleNavigateToDetailSpend = (spendId) => {
     // handle navigate with id
-    console.log(spendId);
+    navigation.navigate('UpdateAndDeleteSpend', { spendId: spendId, rerender: rerender, setRerender: setRerender });
   };
 
   return (
