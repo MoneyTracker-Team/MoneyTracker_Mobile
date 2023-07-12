@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, ImageBackground, Image, TouchableOpacity, Modal, ScrollView } from 'react-native';
 import styles from './calendar.styles.js';
 import checkToDay from '../../../utils/checkToDay.js';
@@ -6,6 +6,7 @@ import bgImg from '../../../../assets/bg-img.png';
 import theme from '../../../config/theme';
 import formatNumber from '../../../utils/formatNumber.js';
 import formatTime from '../../../utils/formatTime.js';
+import { AuthContext } from '../../../context/AuthContext/AuthContext.js';
 // import icon
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons.js';
@@ -19,6 +20,7 @@ const formatDate = (date) => {
 };
 
 function CalendarScreen() {
+  const userId = useContext(AuthContext).userId;
   const [currYear, setCurrYear] = useState(new Date().getFullYear());
   const [currMonth, setCurrMonth] = useState(new Date().getMonth());
   const [statisticData, setStatictisData] = useState({});
@@ -40,7 +42,7 @@ function CalendarScreen() {
   useEffect(() => {
     const fetchDataInMonth = async () => {
       fetch(
-        `https://moneytrackerserver-production.up.railway.app/spends/in-month/6476fc3968a24efaacf90dc6?month=${
+        `https://moneytrackerserver-production.up.railway.app/spends/in-month/${userId}?month=${
           currMonth + 1
         }&year=${currYear}`,
       )
@@ -151,7 +153,7 @@ function CalendarScreen() {
 
   const fetchSpendInDate = async (day, month, year) => {
     return fetch(
-      `https://moneytrackerserver-production.up.railway.app/spends/in-date/6476fc3968a24efaacf90dc6?day=${day}&month=${month}&year=${year}`,
+      `https://moneytrackerserver-production.up.railway.app/spends/in-date/${userId}?day=${day}&month=${month}&year=${year}`,
     )
       .then((response) => response.json())
       .then((result) => {

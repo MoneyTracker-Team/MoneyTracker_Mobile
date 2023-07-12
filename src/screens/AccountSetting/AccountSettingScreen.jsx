@@ -4,6 +4,7 @@ import styles from './accountSetting.styles.js';
 import Ionicons from 'react-native-vector-icons/Ionicons.js';
 import background from '../../../assets/bg-img.png';
 import { AuthContext } from '../../context/AuthContext/AuthContext.js';
+import formatNumber from '../../utils/formatNumber.js';
 const AccountSettingScreen = ({ navigation }) => {
   const userId = useContext(AuthContext).userId;
   const [userData, setUserData] = useState({});
@@ -63,7 +64,7 @@ const AccountSettingScreen = ({ navigation }) => {
           />
         )}
         <Text style={styles.fullname}>{userData?.name}</Text>
-        <Text style={styles.money}>{userData?.currentMoney} vnđ</Text>
+        <Text style={styles.money}>{formatNumber(userData?.currentMoney ? userData?.currentMoney : 0)} vnđ</Text>
       </View>
       <View style={styles.list_action}>
         <TouchableOpacity style={styles.actionBtn} onPress={handlePressPersonalAccount}>

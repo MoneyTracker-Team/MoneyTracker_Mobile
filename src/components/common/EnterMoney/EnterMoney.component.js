@@ -15,9 +15,9 @@ const EnterMoney = (props) => {
 
   const handleMoneyChange = () => {
     const a = parseFloat(money);
-    if (title == 'Thêm trợ cấp') {
+    if (title == 'Thêm trợ cấp' || title == 'Thêm tiền tiết kiệm') {
       setScheduleMoney(scheduleMoney + a);
-    } else {
+    } else if (title == 'Giảm trợ cấp' || title == 'Giảm tiền tiết kiệm') {
       setScheduleMoney(scheduleMoney - a);
     }
     modalState(false);
@@ -38,7 +38,6 @@ const EnterMoney = (props) => {
             placeholder="Nhập số tiền"
             value={money}
             onChangeText={handleTextChange}
-
           ></TextInput>
           <View style={styles.button_container}>
             <TouchableOpacity style={styles.cancel_button} onPress={() => modalState(false)}>
