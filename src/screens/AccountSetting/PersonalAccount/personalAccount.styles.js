@@ -3,7 +3,6 @@ import theme from '../../../config/theme';
 
 const styles = StyleSheet.create({
   wrapper: {
-    backgroundColor: '#000',
     flexDirection: 'column',
     flex: 1,
   },

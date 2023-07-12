@@ -1,20 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Platform, Pressable, Keyboard } from 'react-native';
+import React, { useEffect, useState, useContext } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Platform, Pressable, Keyboard, ImageBackground } from 'react-native';
 import styles from './updateInfo.styles.js';
 import account from '../../../../static/account.js';
+import background from '../../../../../assets/bg-img.png';
 import Ionicons from 'react-native-vector-icons/Ionicons.js';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment/moment.js';
 import theme from '../../../../config/theme';
+import { AuthContext } from '../../../../context/AuthContext/AuthContext.js';
 
-function UpdateInfoScreen({ navigation }) {
-  const [fullName, setFullName] = useState(account[5].name);
-  const [idNumber, setIdNumber] = useState(account[5].idNumber);
-  const [dateOfBirth, setDateOfBirth] = useState(account[5].dateOfBirth);
+function UpdateInfoScreen({ navigation, route }) {
+  const userId = useContext(AuthContext).userId;
+  const { rerender, setRerender } = route.params;
+
+  const [fullName, setFullName] = useState('');
+  const [slogan, setSlogan] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState('');
   const [formReady, setFormReady] = useState(false);
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
-  const [selectedGender, setSelectedGender] = useState(account[5].gender);
+  const [selectedGender, setSelectedGender] = useState(true);
   const handleGenderSelect = (gender) => {
     setSelectedGender(gender);
   };
@@ -39,6 +44,20 @@ function UpdateInfoScreen({ navigation }) {
   };
   const [keyboardStatus, setKeyboardStatus] = useState('');
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const url = `https://moneytrackerserver-production.up.railway.app/users/${userId}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        setFullName(data.data.name);
+        setSlogan(data.data.slogan);
+        setDateOfBirth(moment(data.data.dateOfBirth).format('DD/MM/YYYY'));
+        setSelectedGender(data.data.gender);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
     const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
       setKeyboardStatus('Keyboard Shown');
     });
@@ -52,33 +71,49 @@ function UpdateInfoScreen({ navigation }) {
     };
   }, []);
   useEffect(() => {
-    setFormReady(fullName && idNumber && dateOfBirth && selectedGender);
+    setFormReady(fullName && slogan && dateOfBirth);
     return () => {
       setFormReady(false);
     };
-  }, [fullName, idNumber, dateOfBirth, selectedGender]);
+  }, [fullName, slogan, dateOfBirth, selectedGender]);
   const onSave = () => {
     if (formReady) {
-      // Call API save here
-      navigation.navigate('PersonalAccount'); // chuyển đến màn hình Thông tin
+      fetch(`https://moneytrackerserver-production.up.railway.app/users/update/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: fullName,
+          slogan: slogan,
+          gender: selectedGender,
+          dateOfBirth: dateOfBirth,
+        }),
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          navigation.navigate('PersonalAccount', {
+            rerender: !rerender,
+            setRerender: setRerender,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
   return (
-    <View style={styles.wrapper}>
+    <ImageBackground source={background} style={styles.wrapper}>
       <View style={{ flex: 1 }}>
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Họ và tên:</Text>
           <TextInput style={styles.input} placeholder="Nhập họ tên" value={fullName} onChangeText={setFullName} />
         </View>
         <View style={styles.inputContainer}>
-          <Text style={styles.label}>Số định danh:</Text>
-          <TextInput
-            placeholder="Nhập số định danh"
-            inputMode="numeric"
-            value={idNumber}
-            onChangeText={setIdNumber}
-            style={styles.input}
-          />
+          <Text style={styles.label}>Khẩu hiệu:</Text>
+          <TextInput placeholder="Nhập Khẩu hiệu" value={slogan} onChangeText={setSlogan} style={styles.input} />
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Ngày sinh:</Text>
@@ -128,14 +163,11 @@ function UpdateInfoScreen({ navigation }) {
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Giới tính:</Text>
           <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-            <TouchableOpacity onPress={() => handleGenderSelect('Nam')}>
-              <Text style={styles.genderText}>{selectedGender === 'Nam' ? '●' : '○'} Nam</Text>
+            <TouchableOpacity onPress={() => handleGenderSelect(true)}>
+              <Text style={styles.genderText}>{selectedGender ? '●' : '○'} Nam</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleGenderSelect('Nữ')}>
-              <Text style={styles.genderText}>{selectedGender === 'Nữ' ? '●' : '○'} Nữ</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleGenderSelect('Khác')}>
-              <Text style={styles.genderText}>{selectedGender === 'Khác' ? '●' : '○'} Khác</Text>
+            <TouchableOpacity onPress={() => handleGenderSelect(false)}>
+              <Text style={styles.genderText}>{!selectedGender ? '●' : '○'} Nữ</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -156,7 +188,7 @@ function UpdateInfoScreen({ navigation }) {
           <Text style={[styles.buttonText, { color: formReady ? theme.colors.white : theme.colors.black }]}>Lưu</Text>
         </Pressable>
       )}
-    </View>
+    </ImageBackground>
   );
 }
 

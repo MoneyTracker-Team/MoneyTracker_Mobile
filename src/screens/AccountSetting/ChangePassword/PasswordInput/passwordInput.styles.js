@@ -2,12 +2,9 @@ import { Dimensions, StyleSheet } from 'react-native';
 import theme from '../../../../config/theme';
 
 const styles = StyleSheet.create({
-  wrapper: {
-    flexDirection: 'column',
-    flex: 1,
-  },
   inputContainer: {
     marginVertical: '4%',
+    position: 'relative',
   },
   label: {
     marginBottom: '2%',
@@ -23,25 +20,11 @@ const styles = StyleSheet.create({
     color: theme.colors.black,
     fontSize: theme.fontSizes.text_body,
   },
-  datePicker: {
-    height: '40%',
-  },
-  button: {
-    paddingVertical: '4%',
-    width: '25%',
-    borderRadius: 30,
-  },
-  pickerButton: {
-    paddingHorizontal: 20,
-  },
-  buttonText: {
-    fontSize: theme.fontSizes.text_body,
-    color: theme.colors.black,
-    textAlign: 'center',
-  },
-  genderText: {
-    color: theme.colors.white,
-    fontSize: theme.fontSizes.text_body,
+  eyeBtn: {
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    top: '50%',
+    right: '12%',
   },
 });
 

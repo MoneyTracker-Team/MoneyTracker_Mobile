@@ -4,6 +4,7 @@ import styles from './EditMoney.style';
 import theme from '../../../config/theme';
 
 const DisplayMoney = (props) => {
+
   const { placeholder, moneySpend, setValue } = props;
 
   const [money, setMoney] = useState(0);

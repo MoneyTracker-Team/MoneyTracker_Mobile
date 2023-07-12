@@ -38,6 +38,7 @@ const EnterMoney = (props) => {
             placeholder="Nhập số tiền"
             value={money}
             onChangeText={handleTextChange}
+
           ></TextInput>
           <View style={styles.button_container}>
             <TouchableOpacity style={styles.cancel_button} onPress={() => modalState(false)}>

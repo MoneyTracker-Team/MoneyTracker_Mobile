@@ -25,7 +25,10 @@ import FriendsListScreen from '../screens/AccountSetting/FriendsList';
 import LoansScreen from '../screens/AccountSetting/Loans';
 import SavingsScreen from '../screens/AccountSetting/Savings';
 import AboutScreen from '../screens/AccountSetting/About';
-
+import PaymentScreen from '../screens/AccountSetting/Loans/PaymentScreen/PaymentScreen';
+import DebtDetailScreen from '../screens/AccountSetting/Loans/DebtDetailScreen/DebtDetailScreen';
+import CreateDebtScreen from '../screens/AccountSetting/Loans/CreateDebtSreen/CreateDebtSreen';
+import EditDebtScreen from '../screens/AccountSetting/Loans/EditDebtSreen/EditDebtSreen';
 const Stack = createStackNavigator();
 
 // Auth Stack
@@ -130,6 +133,10 @@ const StackFromAccountTag = () => {
       <Stack.Screen name="Loans" component={LoansScreen} options={{ title: 'Khoản vay nợ' }} />
       <Stack.Screen name="Savings" component={SavingsScreen} options={{ title: 'Điều chỉnh tiền tiết kiệm' }} />
       <Stack.Screen name="About" component={AboutScreen} options={{ title: 'Thông tin ứng dụng' }} />
+      <Stack.Screen name="Payment" component={PaymentScreen} options={{ title: 'Thanh toán' }} />
+      <Stack.Screen name="DebtDetail" component={DebtDetailScreen} options={{ title: 'Chi tiết phiếu nợ' }} />
+      <Stack.Screen name="CreateDebt" component={CreateDebtScreen} options={{ title: 'Tạo phiếu nợ' }} />
+      <Stack.Screen name="EditDebt" component={EditDebtScreen} options={{ title: 'Sửa phiếu nợ' }} />
     </Stack.Navigator>
   );
 };
