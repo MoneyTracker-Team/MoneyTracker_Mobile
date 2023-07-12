@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
   },
   btn_spend: {
     flex: 1,
-    width: '88%',
+    width: '94%',
     backgroundColor: theme.colors.white,
     elevation: 4,
     shadowColor: theme.colors.black,
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
   },
   spend: {
     marginVertical: '1%',
-    marginHorizontal: '5%',
+    marginHorizontal: 8,
     display: 'flex',
     flexDirection: 'row',
   },

@@ -287,9 +287,14 @@ function CalendarScreen({ navigation }) {
                             <Text style={styles.spend_name}>{spend.name}</Text>
                             <Text style={styles.spend_text}>{formatTime(spend.dateTime)}</Text>
                           </View>
-                          <TouchableOpacity onPress={() => handleNavigateToDetailSpend(spend._id)}>
-                            <Ionicons style={styles.spend_icon} name="chevron-forward-sharp" size={24} />
-                          </TouchableOpacity>
+                          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                            <Text style={{ fontWeight: '500', fontSize: 17 }}>
+                              {formatNumber(spend.moneySpend)} VND
+                            </Text>
+                            <TouchableOpacity onPress={() => handleNavigateToDetailSpend(spend._id)}>
+                              <Ionicons style={styles.spend_icon} name="chevron-forward-sharp" size={24} />
+                            </TouchableOpacity>
+                          </View>
                         </View>
                       </View>
                     );
