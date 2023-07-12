@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ImageBackground, Image, TouchableOpacity, Modal, TextInput, ScrollView } from 'react-native';
+import { View, Text, ImageBackground, Image, TouchableOpacity, Modal, ScrollView } from 'react-native';
 import styles from './calendar.styles.js';
 import checkToDay from '../../../utils/checkToDay.js';
 import bgImg from '../../../../assets/bg-img.png';
 import theme from '../../../config/theme';
+import formatNumber from '../../../utils/formatNumber.js';
+import formatTime from '../../../utils/formatTime.js';
 // import icon
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons.js';
 
 const dayOfWeeks = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'CN'];
+// ex: 2023-07-08 -> 08-07-2023
+const formatDate = (date) => {
+  let splitDate = date.split('-');
+  reverseDate = splitDate.reverse();
+  return reverseDate.join('-');
+};
 
 function CalendarScreen() {
   const [currYear, setCurrYear] = useState(new Date().getFullYear());
@@ -93,7 +101,10 @@ function CalendarScreen() {
       });
     }
     return qnt > 0 ? (
-      <TouchableOpacity style={{ position: 'relative', paddingTop: 12, paddingBottom: 12 }}>
+      <TouchableOpacity
+        style={{ position: 'relative', paddingTop: 12, paddingBottom: 12 }}
+        onPress={() => handleShowSpendInDate(day)}
+      >
         <Text style={styles.calendarItemText}>{day}</Text>
         <View style={[styles.quantitySpendWrap, isToday ? styles.bgGreen : '']}>
           <Text style={styles.quantitySpendText}>{qnt}</Text>
@@ -138,13 +149,23 @@ function CalendarScreen() {
     return dateOfCalendars;
   };
 
-  const handleShowSpendInDate = (date) => {
-    console.log(`${date}-${currMonth + 1}-${currYear}`);
-    setVisibleModal(true);
+  const fetchSpendInDate = async (day, month, year) => {
+    return fetch(
+      `https://moneytrackerserver-production.up.railway.app/spends/in-date/6476fc3968a24efaacf90dc6?day=${day}&month=${month}&year=${year}`,
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        return result.data;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
-  const handleViewSpendMonthly = () => {
-    console.log(`${currMonth + 1}-${currYear}`);
+  const handleShowSpendInDate = async (day) => {
+    const data = await fetchSpendInDate(day, currMonth + 1, currYear);
+    setSpendInDates(data);
+    setVisibleModal(true);
   };
 
   //* MODAL
@@ -152,8 +173,9 @@ function CalendarScreen() {
     setVisibleModal(false);
   };
 
-  const handleNavigateToDetailSpend = () => {
-    //
+  const handleNavigateToDetailSpend = (spendId) => {
+    // handle navigate with id
+    console.log(spendId);
   };
 
   return (
@@ -194,27 +216,28 @@ function CalendarScreen() {
           <View style={styles.statisticWrap}>
             {/* Grid Item */}
             <View style={styles.statisticItem}>
-              <Text style={styles.itemlargeText}>{Number(statisticData?.totalMoney ?? 0) / 1000}K</Text>
+              <Text style={styles.itemlargeText}>{formatNumber(Number(statisticData?.totalMoney ?? 0) / 1000)}K</Text>
               <Text style={styles.itemSmallText}>Tổng tiền đã chi tiêu</Text>
             </View>
 
-            <TouchableOpacity
-              style={[styles.statisticItem, styles.statisticItemPressable]}
-              onPress={handleViewSpendMonthly}
-            >
+            <View style={[styles.statisticItem, styles.statisticItemPressable]}>
               <Text style={[styles.itemlargeText, styles.itemlargeTextPressable]}>
-                {Number(statisticData?.fixedMoney ?? 0) / 1000}K
+                {formatNumber(Number(statisticData?.fixedMoney ?? 0) / 1000)}K
               </Text>
               <Text style={[styles.itemSmallText, styles.itemlargeTextPressable]}>Các khoản cố định</Text>
-            </TouchableOpacity>
+            </View>
 
             <View style={styles.statisticItem}>
-              <Text style={styles.itemlargeText}>{Number(statisticData?.maxTotalMoney ?? 0) / 1000}K</Text>
+              <Text style={styles.itemlargeText}>
+                {formatNumber(Number(statisticData?.maxTotalMoney ?? 0) / 1000)}K
+              </Text>
               <Text style={styles.itemSmallText}>Ngày tiêu nhiều nhất</Text>
             </View>
 
             <View style={styles.statisticItem}>
-              <Text style={styles.itemlargeText}>{Number(statisticData?.minTotalMoney ?? 0) / 1000}K</Text>
+              <Text style={styles.itemlargeText}>
+                {formatNumber(Number(statisticData?.minTotalMoney ?? 0) / 1000)}K
+              </Text>
               <Text style={styles.itemSmallText}>Ngày tiêu ít nhất</Text>
             </View>
           </View>
@@ -227,8 +250,12 @@ function CalendarScreen() {
           <View style={styles.modal_spend_container}>
             <View style={styles.modal_spend_header}>
               <View style={{ display: 'flex', flexDirection: 'column' }}>
-                <Text style={{ color: theme.colors.white, fontSize: 20, fontWeight: '600' }}>31.000 VND</Text>
-                <Text style={{ color: theme.colors.white, fontSize: theme.fontSizes.text_body }}>Ngày: 06/06/2023</Text>
+                <Text style={{ color: theme.colors.white, fontSize: 20, fontWeight: '600' }}>
+                  {formatNumber(spendInDates?.totalMoney ?? 0)} VND
+                </Text>
+                <Text style={{ color: theme.colors.white, fontSize: theme.fontSizes.text_body }}>
+                  Ngày: {formatDate(spendInDates.date)}
+                </Text>
               </View>
               {/* Close modal btn */}
               <TouchableOpacity onPress={() => handleCloseModal()}>
@@ -238,28 +265,29 @@ function CalendarScreen() {
             {/* Body modal */}
             <View style={styles.modal_spend_content}>
               <ScrollView contentContainerStyle={styles.modal_spend_scroll_view_content}>
-                {[1, 1, 1, 1, 1, 1, 1].map((item, index) => {
-                  return (
-                    //* Spend Item
-                    <View key={index} style={styles.btn_spend}>
-                      <View style={styles.spend}>
-                        <Image
-                          style={styles.spend_img}
-                          source={{
-                            uri: 'https://res.cloudinary.com/dwskvqnkc/image/upload/v1685377490/avt_cfzkte.jpg',
-                          }}
-                        />
-                        <View style={styles.text_container}>
-                          <Text style={styles.spend_name}>{'Tên chi tiêu'}</Text>
-                          <Text style={styles.spend_text}>{'Giờ'}</Text>
+                {spendInDates?.spends &&
+                  spendInDates.spends.map((spend, index) => {
+                    return (
+                      //* Spend Item
+                      <View key={index} style={styles.btn_spend}>
+                        <View style={styles.spend}>
+                          <Image
+                            style={styles.spend_img}
+                            source={{
+                              uri: spend.image,
+                            }}
+                          />
+                          <View style={styles.text_container}>
+                            <Text style={styles.spend_name}>{spend.name}</Text>
+                            <Text style={styles.spend_text}>{formatTime(spend.dateTime)}</Text>
+                          </View>
+                          <TouchableOpacity onPress={() => handleNavigateToDetailSpend(spend._id)}>
+                            <Ionicons style={styles.spend_icon} name="chevron-forward-sharp" size={24} />
+                          </TouchableOpacity>
                         </View>
-                        <TouchableOpacity onPress={handleNavigateToDetailSpend}>
-                          <Ionicons style={styles.spend_icon} name="chevron-forward-sharp" size={24} />
-                        </TouchableOpacity>
                       </View>
-                    </View>
-                  );
-                })}
+                    );
+                  })}
               </ScrollView>
             </View>
             <View style={styles.line}></View>
