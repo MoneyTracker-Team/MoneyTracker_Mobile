@@ -223,6 +223,7 @@ const StatisticPieScreen = ({ navigation }) => {
               fromZero={true}
               showBarTops={true}
               withInnerLines={true}
+              withVerticalLabels={false}
             />
           </View>
         )}

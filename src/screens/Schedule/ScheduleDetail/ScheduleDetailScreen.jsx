@@ -16,6 +16,21 @@ const ScheduleDetailScreen = ({ navigation, route }) => {
   const [scrollView1Ref, setScrollView1Ref] = useState(null);
   const [scrollView2Ref, setScrollView2Ref] = useState(null);
 
+  useEffect(() => {
+    if (month == new Date().getMonth() && year == new Date().getFullYear()) {
+      scrollView1Ref?.scrollTo({
+        y: 0,
+        x: width * (new Date().getDate() - 1),
+        animated: false,
+      });
+      scrollView2Ref?.scrollTo({
+        y: 0,
+        x: (width / 8) * (new Date().getDate() - 1),
+        animated: false,
+      });
+    }
+  }, [scrollView1Ref]);
+
   function getAllDaysAndWeekdays(month, year) {
     const startDate = new Date(year, month, 1);
     const endDate = new Date(year, month + 1, 0);
@@ -24,39 +39,76 @@ const ScheduleDetailScreen = ({ navigation, route }) => {
 
     let currentDate = startDate;
     let weekDay;
-    while (currentDate <= endDate) {
-      switch (currentDate.getDay()) {
-        case 0:
-          weekDay = 'CN';
-          break;
-        case 1:
-          weekDay = 'Hai';
-          break;
-        case 2:
-          weekDay = 'Ba';
-          break;
-        case 3:
-          weekDay = 'Tư';
-          break;
-        case 4:
-          weekDay = 'Năm';
-          break;
-        case 5:
-          weekDay = 'Sáu';
-          break;
-        case 6:
-          weekDay = 'Bảy';
-          break;
-      }
-      const day = {
-        id: currentDate.getDate(),
-        date: currentDate.getDate(),
-        weekDay: weekDay,
-        isPressed: currentDate.getDate() == 1 ? true : false,
-      };
-      allDays.push(day);
+    if (month == new Date().getMonth() && year == new Date().getFullYear()) {
+      while (currentDate <= endDate) {
+        switch (currentDate.getDay()) {
+          case 0:
+            weekDay = 'CN';
+            break;
+          case 1:
+            weekDay = 'Hai';
+            break;
+          case 2:
+            weekDay = 'Ba';
+            break;
+          case 3:
+            weekDay = 'Tư';
+            break;
+          case 4:
+            weekDay = 'Năm';
+            break;
+          case 5:
+            weekDay = 'Sáu';
+            break;
+          case 6:
+            weekDay = 'Bảy';
+            break;
+        }
+        const day = {
+          id: currentDate.getDate(),
+          date: currentDate.getDate(),
+          weekDay: weekDay,
+          isPressed: currentDate.getDate() == new Date().getDate() ? true : false,
+        };
+        allDays.push(day);
 
-      currentDate.setDate(currentDate.getDate() + 1);
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+    } else {
+      while (currentDate <= endDate) {
+        switch (currentDate.getDay()) {
+          case 0:
+            weekDay = 'CN';
+            break;
+          case 1:
+            weekDay = 'Hai';
+            break;
+          case 2:
+            weekDay = 'Ba';
+            break;
+          case 3:
+            weekDay = 'Tư';
+            break;
+          case 4:
+            weekDay = 'Năm';
+            break;
+          case 5:
+            weekDay = 'Sáu';
+            break;
+          case 6:
+            weekDay = 'Bảy';
+            break;
+        }
+        const day = {
+          id: currentDate.getDate(),
+          date: currentDate.getDate(),
+          weekDay: weekDay,
+          isPressed: currentDate.getDate() == 1 ? true : false,
+        };
+        allDays.push(day);
+
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
     }
 
     return allDays;
@@ -86,6 +138,11 @@ const ScheduleDetailScreen = ({ navigation, route }) => {
     setListDate(
       listDate.map((date) => {
         if (date.id === Math.round(contentOffset.x / width) + 1) {
+          scrollView2Ref?.scrollTo({
+            y: 0,
+            x: (width / 8) * (date.id - 1),
+            animated: false,
+          });
           return { ...date, isPressed: true };
         } else {
           return { ...date, isPressed: false };
@@ -105,8 +162,8 @@ const ScheduleDetailScreen = ({ navigation, route }) => {
               : `${formatNumber(currentSchedule.scheduleMoney ? currentSchedule.scheduleMoney / 1000 : 0)}K`}
           </Text>
           <View style={styles.overview_desc_container}>
-            <Feather name="chevrons-down" size={16} color={theme.colors.tertiary} />
-            <Text style={styles.overview_desc_text}>500k ít hơn tháng trước</Text>
+            {/* <Feather name="chevrons-down" size={16} color={theme.colors.tertiary} /> */}
+            <Text style={styles.overview_desc_text}></Text>
           </View>
         </View>
         <View>
@@ -129,7 +186,9 @@ const ScheduleDetailScreen = ({ navigation, route }) => {
                         key={date.id}
                         date={`${date.date}/${month + 1}/${year}`}
                         limitMoney={`${formatNumber(
-                          currentSchedule.moneyLimit ? currentSchedule.moneyLimit / 1000 : 0,
+                          currentSchedule.moneyLimit && new Date(year, month, date.date + 1) >= new Date()
+                            ? currentSchedule.moneyLimit / 1000
+                            : 0,
                         )}K`}
                         spentMoney={`${formatNumber(value.spended ? value.spended / 1000 : 0)}K`}
                       />
