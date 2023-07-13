@@ -22,6 +22,7 @@ const SpendScheduleScreen = ({ navigation }) => {
 
   const [currentSchedule, setCurrentSchedule] = useState({});
 
+  const [compareDate, setCompareDate] = useState(new Date());
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedMonth, setSelectedMonth] = useState('Tháng này');
 
@@ -150,10 +151,18 @@ const SpendScheduleScreen = ({ navigation }) => {
             />
           </View>
           <View style={styles.button_container}>
-            <TouchableOpacity style={styles.add_button} onPress={() => setModalAddMoney(true)}>
+            <TouchableOpacity
+              style={currentMonth < compareDate ? styles.disabled_add_button : styles.add_button}
+              disabled={currentMonth < compareDate}
+              onPress={() => setModalAddMoney(true)}
+            >
               <Text style={styles.add_button_text}>Thêm trợ cấp</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.subtract_button} onPress={() => setModalSubMoney(true)}>
+            <TouchableOpacity
+              style={currentMonth < compareDate ? styles.disabled_subtract_button : styles.subtract_button}
+              disabled={currentMonth < compareDate}
+              onPress={() => setModalSubMoney(true)}
+            >
               <Text style={styles.subtract_button_text}>Giảm trợ cấp</Text>
             </TouchableOpacity>
           </View>
