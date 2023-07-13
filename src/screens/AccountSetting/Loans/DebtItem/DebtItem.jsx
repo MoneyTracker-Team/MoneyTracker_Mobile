@@ -3,6 +3,7 @@ import { View, Text, Image } from 'react-native';
 import styles from './debtItem.styles.js';
 import theme from '../../../../config/theme.js';
 import moment from 'moment';
+import formatNumber from '../../../../utils/formatNumber.js';
 
 const DebtItem = ({ item }) => {
   return (
@@ -22,10 +23,15 @@ const DebtItem = ({ item }) => {
           <View
             style={[
               styles.moneyContainer,
-              { backgroundColor: item.status === 'debt' ? theme.colors.tertiary : theme.colors.light_primary },
+              { backgroundColor: item.isDebt === true ? theme.colors.tertiary : theme.colors.light_primary },
             ]}
           >
-            <Text style={styles.moneyAmount}>{formatNumber(item.moneySpend ? item.moneySpend / 1000 : 0)}K</Text>
+            <Text style={styles.moneyAmount}>
+              {item.isDebt
+                ? formatNumber(item.moneySpend ? 0 - item.moneySpend / 1000 : 0)
+                : formatNumber(item.moneySpend ? item.moneySpend / 1000 : 0)}
+              K
+            </Text>
           </View>
         </View>
         <View style={styles.noteContainer}>

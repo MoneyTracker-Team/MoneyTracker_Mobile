@@ -7,6 +7,7 @@ import { AuthContext } from '../../context/AuthContext/AuthContext.js';
 import formatNumber from '../../utils/formatNumber.js';
 const AccountSettingScreen = ({ navigation }) => {
   const userId = useContext(AuthContext).userId;
+  const logout = useContext(AuthContext).logout;
   const [userData, setUserData] = useState({});
   const [rerender, setRerender] = useState(true);
   const handlePressPersonalAccount = () => {
@@ -39,6 +40,11 @@ const AccountSettingScreen = ({ navigation }) => {
     navigation.navigate('About'); // chuyển đến màn hình Thông tin về ứng dụng
   };
 
+  const handleLogout = () => {
+    logout();
+    navigation.navigate('Login');
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -59,7 +65,7 @@ const AccountSettingScreen = ({ navigation }) => {
           <Image
             style={styles.image}
             source={{
-              uri: userData?.avatar,
+              uri: userData.avatar,
             }}
           />
         )}
@@ -113,6 +119,13 @@ const AccountSettingScreen = ({ navigation }) => {
           <View style={styles.action}>
             <Ionicons style={styles.action_icon} name="information-circle-outline" size={24} />
             <Text style={styles.action_title}>Thông tin ứng dụng</Text>
+            <Ionicons style={styles.next_icon} name="chevron-forward-outline" size={24} />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.actionBtn} onPress={handleLogout}>
+          <View style={styles.action}>
+            <Ionicons style={styles.action_icon} name="log-out-outline" size={24} />
+            <Text style={styles.action_title}>Đăng xuất</Text>
             <Ionicons style={styles.next_icon} name="chevron-forward-outline" size={24} />
           </View>
         </TouchableOpacity>
