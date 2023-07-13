@@ -98,7 +98,11 @@ const StackFromStatisticTag = () => {
         ),
       }}
     >
-      <Stack.Screen name="Statistic" component={StatisticScreen} options={{ headerLeft: () => <></> }} />
+      <Stack.Screen
+        name="Statistics"
+        component={StatisticScreen}
+        options={{ headerLeft: () => <></>, title: 'Thống kê' }}
+      />
     </Stack.Navigator>
   );
 };
@@ -116,7 +120,11 @@ const StackFromAccountTag = () => {
         ),
       }}
     >
-      <Stack.Screen name="AccountSetting" component={AccountSettingScreen} options={{ headerLeft: () => <></> }} />
+      <Stack.Screen
+        name="AccountSetting"
+        component={AccountSettingScreen}
+        options={{ headerLeft: () => <></>, title: 'Cài đặt tài khoản' }}
+      />
       <Stack.Screen
         name="PersonalAccount"
         component={PersonalAccountScreen}

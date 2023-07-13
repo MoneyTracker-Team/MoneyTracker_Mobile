@@ -4,27 +4,39 @@ import theme from '../../../../config/theme';
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: 'black',
   },
   money_amount_container: {
-    height: '30%',
+    height: '35%',
     backgroundColor: 'rgba(52, 52, 52, 0.65)',
     alignItems: 'center',
   },
   money_container: {
     height: '28%',
     width: '85%',
-    marginTop: '5%',
+    marginTop: '15%',
   },
-  btn_create: {
-    backgroundColor: theme.colors.quaternary,
-    height: '27%',
+  primary_button_container: {
+    flexDirection: 'row',
+    height: '49%',
+    width: '100%',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  btn_delete: {
+    backgroundColor: '#BC1331',
+    height: '40%',
     borderRadius: 10,
     width: '35%',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: '8%',
-    marginLeft: '50%',
+  },
+  btn_save: {
+    backgroundColor: theme.colors.quaternary,
+    height: '40%',
+    borderRadius: 10,
+    width: '35%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   btn_create_text: {
     color: theme.colors.white,
@@ -38,8 +50,7 @@ const styles = StyleSheet.create({
   },
   category_sub_container1: {
     backgroundColor: 'rgba(52, 52, 52, 0.65)',
-    // height: 270,
-    flex: 1,
+    height: 270,
     width: '90%',
     marginTop: '3%',
     borderRadius: 20,
@@ -96,7 +107,7 @@ const styles = StyleSheet.create({
   },
   category_sub_container2: {
     backgroundColor: 'rgba(52, 52, 52, 0.65)',
-    height: '26%',
+    height: 68,
     width: '90%',
     marginTop: '3%',
     borderRadius: 20,
@@ -131,6 +142,12 @@ const styles = StyleSheet.create({
   },
   modal_background: {
     flex: 1,
+    backgroundColor: 'rgba(54, 54, 54, 0.75)',
+    marginTop: '14%',
+    justifyContent: 'center',
+  },
+  modalViewTop: {
+    height: '100%',
     backgroundColor: 'rgba(54, 54, 54, 0.75)',
     marginTop: '14%',
     justifyContent: 'center',
@@ -205,9 +222,30 @@ const styles = StyleSheet.create({
     color: theme.colors.quaternary,
     padding: 8,
   },
+  friend_item_container: {
+    flexDirection: 'row',
+    backgroundColor: theme.colors.text_blur,
+    justifyContent: 'space-between',
+    borderRadius: 20,
+    borderWidth: 0.8,
+  },
+  friend_item: {
+    fontSize: theme.fontSizes.text_body,
+    color: theme.colors.white,
+    textAlignVertical: 'center',
+  },
+  btn_delete_friend_item_container: {
+    justifyContent: 'center',
+  },
+  btn_delete_friend_item: {
+    color: theme.colors.black,
+  },
   modal_friend_container: {
-    marginHorizontal: '8%',
-    marginVertical: '42%',
+    height: '65%',
+    width: '85%',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    height: 500,
   },
   modal_friend_header: {
     backgroundColor: theme.colors.quaternary,
@@ -271,6 +309,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
   },
+  disabled_friend: {
+    marginVertical: '1%',
+    marginHorizontal: '5%',
+    display: 'flex',
+    flexDirection: 'row',
+    opacity: 0.5,
+  },
   friend_img: {
     padding: 20,
     borderRadius: 50,
@@ -278,7 +323,7 @@ const styles = StyleSheet.create({
   },
   friend_img_display: {
     paddingHorizontal: '6%',
-    height: '80%',
+    height: '90%',
     marginLeft: '1%',
     borderRadius: 50,
     marginEnd: '8%',
@@ -400,9 +445,28 @@ const styles = StyleSheet.create({
   camera_icon: {
     color: theme.colors.white,
   },
-  modal_container: {
-    flex: 1,
-    backgroundColor: 'rgba(54, 54, 54, 0.75)',
+  modal_note_container: {
+    marginHorizontal: '8%',
+    marginVertical: '25%',
+    borderRadius: 50,
+    height: 280,
+  },
+  note_input_container: {
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
+    backgroundColor: theme.colors.white,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    height: '40%',
+  },
+  note_input: {
+    backgroundColor: '#D9D9D9',
+    height: '47%',
+    width: '70%',
+    borderRadius: 10,
+    marginRight: '2%',
+    paddingLeft: 15,
   },
 });
 

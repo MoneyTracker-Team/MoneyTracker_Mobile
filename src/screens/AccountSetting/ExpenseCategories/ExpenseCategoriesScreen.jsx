@@ -9,6 +9,7 @@ import {
   TextInput,
   Keyboard,
   ImageBackground,
+  Alert,
 } from 'react-native';
 import styles from './expenseCategories.styles.js';
 import categories from '../../../static/categories.js';
@@ -102,6 +103,43 @@ function ExpenseCategoriesScreen({ navigation }) {
       setShowModal(true);
     }
   };
+
+  const onDelete = async () => {
+    Alert.alert('Xác nhận xóa', 'Bạn có chắc chắn muốn xóa danh mục này không?', [
+      {
+        text: 'Hủy',
+        style: 'cancel',
+      },
+      {
+        text: 'Có',
+        onPress: async () =>
+          await fetch(`https://moneytrackerserver-production.up.railway.app/type-spends/delete/${selectedItem._id}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              setRerender(!rerender);
+              Alert.alert('Xóa danh mục chi tiêu thành công', '', [
+                {
+                  text: 'Ok',
+                  onPress: () => {
+                    setInputValue('');
+                    setShowModal(false);
+                  },
+                  style: 'cancel',
+                },
+              ]);
+            })
+            .catch((error) => {
+              console.error(error);
+            }),
+      },
+    ]);
+  };
+
   const onSave = async () => {
     if (selectedItem) {
       if (base64Image) {
@@ -296,10 +334,14 @@ function ExpenseCategoriesScreen({ navigation }) {
                   <Image source={{ uri: image }} style={styles.image} />
                 </View>
               )}
-
-              <TouchableOpacity style={styles.btnSaveCategory} onPress={onSave}>
-                <Text style={styles.textAddNewCategory}>Lưu</Text>
-              </TouchableOpacity>
+              <View style={styles.btnContainer}>
+                <TouchableOpacity style={styles.btnSaveCategory} onPress={onDelete}>
+                  <Text style={styles.textAddNewCategory}>Xoá</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.btnSaveCategory} onPress={onSave}>
+                  <Text style={styles.textAddNewCategory}>Lưu</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>

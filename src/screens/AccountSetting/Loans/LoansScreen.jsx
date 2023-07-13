@@ -3,12 +3,11 @@ import { View, Text, Image, TouchableOpacity, ImageBackground, FlatList } from '
 import styles from './loans.styles.js';
 import background from '../../../../assets/bg-img.png';
 import theme from '../../../config/theme.js';
-// import debts from '../../../static/debts.js';
-// import debtAccounts from '../../../static/debtAccounts.js';
 import ScreenTab from '../../../components/ScreenTab/ScreenTab.component.js';
 import DebtItem from './DebtItem/DebtItem.jsx';
 import DebtAccountItem from './DebtAccountItem/DebtAccountItem.jsx';
 import { AuthContext } from '../../../context/AuthContext/AuthContext.js';
+import formatNumber from '../../../utils/formatNumber.js';
 function LoansScreen({ navigation }) {
   const userId = useContext(AuthContext).userId;
   const [rerender, setRerender] = useState(true);
@@ -20,6 +19,8 @@ function LoansScreen({ navigation }) {
   }, []);
   const [loanData, setLoanData] = useState([]);
   const [accountDetbData, setAccountDetbData] = useState([]);
+  const [totalLoans, setTotalLoans] = useState(0);
+  const [totalDebts, setTotalDebts] = useState(0);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -27,13 +28,23 @@ function LoansScreen({ navigation }) {
         const response1 = await fetch(url1);
         const data1 = await response1.json();
         setLoanData(data1.data);
-
+        const totals = data1.data.reduce(
+          (accumulator, currentItem) => {
+            if (currentItem.isDebt) {
+              accumulator.totalDebt += currentItem.moneySpend;
+            } else {
+              accumulator.totalLending += currentItem.moneySpend;
+            }
+            return accumulator;
+          },
+          { totalDebt: 0, totalLending: 0 },
+        );
+        setTotalDebts(totals.totalDebt);
+        setTotalLoans(totals.totalLending);
         const url2 = `https://moneytrackerserver-production.up.railway.app/loans/group-by-debtor/${userId}`;
         const response2 = await fetch(url2);
         const data2 = await response2.json();
         setAccountDetbData(data2.data);
-
-        setStatusFilter(status);
       } catch (error) {
         console.log(error);
       }
@@ -57,12 +68,12 @@ function LoansScreen({ navigation }) {
   }, [loanData]);
 
   const handleAddNewdebtLoan = () => {
-    navigation.navigate('CreateDebt', { status: status });
+    navigation.navigate('CreateDebt', { status: status, rerender: rerender, setRerender: setRerender });
     // Call API here
   };
   const renderDebtItem = ({ item, index }) => {
     const handleDebtItemPress = () => {
-      navigation.navigate('DebtDetail', { debtId: item._id });
+      navigation.navigate('DebtDetail', { debtId: item._id, rerender: rerender, setRerender: setRerender });
     };
 
     return (
@@ -95,16 +106,20 @@ function LoansScreen({ navigation }) {
           marginStart: '8%',
         }}
       />
-      {status === 'debt' && (
+      {status === true && (
         <View style={{ flexDirection: 'column', margin: '3%' }}>
           <Text style={styles.isFriendText}>Số tiền đang nợ:</Text>
-          <Text style={{ color: theme.colors.white, fontSize: theme.fontSizes.headline_one }}>350000 vnđ</Text>
+          <Text style={{ color: theme.colors.white, fontSize: theme.fontSizes.headline_one }}>
+            {formatNumber(totalDebts)} vnđ
+          </Text>
         </View>
       )}
-      {status === 'loan' && (
+      {status === false && (
         <View style={{ flexDirection: 'column', margin: '3%' }}>
           <Text style={styles.isFriendText}>Số tiền đang cho nợ:</Text>
-          <Text style={{ color: theme.colors.white, fontSize: theme.fontSizes.headline_one }}>500000 vnđ</Text>
+          <Text style={{ color: theme.colors.white, fontSize: theme.fontSizes.headline_one }}>
+            {formatNumber(totalLoans)} vnđ
+          </Text>
         </View>
       )}
       {status !== 'payment' && (

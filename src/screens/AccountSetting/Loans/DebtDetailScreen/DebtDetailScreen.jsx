@@ -7,10 +7,10 @@ import styles from './debtDetailScreen.styles';
 import formatNumber from '../../../../utils/formatNumber';
 const DebtDetailScreen = ({ navigation }) => {
   const route = useRoute();
-  const { debtId } = route.params;
+  const { debtId, rerender, setRerender } = route.params;
   const [debtDetailData, setDebtDetailData] = useState({});
   const onEdit = () => {
-    navigation.navigate('EditDebt', { debtDetailData: debtDetailData });
+    navigation.navigate('EditDebt', { debtId: debtId, rerender: rerender, setRerender: setRerender });
   };
 
   function formatDatetime(datetimeStr) {
@@ -46,7 +46,7 @@ const DebtDetailScreen = ({ navigation }) => {
       }
     };
     fetchData();
-  }, []);
+  }, [rerender]);
   return (
     <ImageBackground source={background} style={styles.wrapper}>
       <View style={styles.info}>

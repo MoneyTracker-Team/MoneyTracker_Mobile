@@ -20,6 +20,9 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
     textAlign: 'center',
   },
+  isFriendText: {
+    color: theme.colors.white,
+  },
 });
 
 export default styles;

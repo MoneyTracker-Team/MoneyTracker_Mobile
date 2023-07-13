@@ -360,11 +360,7 @@ const UpdateAndDeleteSpend = ({ navigation, route }) => {
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.money_amount_container}>
           <View style={styles.money_container}>
-            <EditMoney
-              placeholder="Nhập số tiền"
-              moneySpend={formatNumber(moneySpend ? moneySpend : 0)}
-              setValue={handleMoneySpend}
-            />
+            <EditMoney placeholder="Nhập số tiền" moneySpend={moneySpend} setValue={handleMoneySpend} />
           </View>
           <View style={styles.primary_button_container}>
             <TouchableOpacity style={styles.btn_delete} onPress={deleteSpending}>

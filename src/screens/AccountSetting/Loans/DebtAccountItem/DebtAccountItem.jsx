@@ -20,10 +20,10 @@ const DebtAccountItem = ({ item }) => {
             <Text style={styles.isFriendText}>Bạn bè</Text>
           </View>
           <View style={[styles.moneyContainer, { backgroundColor: theme.colors.tertiary }]}>
-            <Text style={styles.moneyAmount}>{formatNumber(item.totalDebt ? item.totalDebt / 1000 : 0)}K</Text>
+            <Text style={styles.moneyAmount}>-{formatNumber(item.totalDebt ? item.totalDebt / 1000 : 0)}K</Text>
           </View>
           <View style={[styles.moneyContainer, { backgroundColor: theme.colors.light_primary }]}>
-            <Text style={styles.moneyAmount}>{formatNumber(item.totalLoan ? item.totalLoan / 1000 : 0)}K</Text>
+            <Text style={styles.moneyAmount}>+{formatNumber(item.totalLoan ? item.totalLoan / 1000 : 0)}K</Text>
           </View>
         </View>
       </View>
