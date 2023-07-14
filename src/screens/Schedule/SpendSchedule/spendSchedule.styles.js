@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     paddingVertical: '3%',
     paddingHorizontal: '8%',
     borderRadius: 10,
-    opacity: 0.7,
+    opacity: 0.4,
   },
   disabled_subtract_button: {
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: theme.colors.quaternary,
-    opacity: 0.7,
+    opacity: 0.4,
   },
   add_button_text: {
     fontSize: theme.fontSizes.text_body,
