@@ -50,7 +50,7 @@ const HomeScreen = ({ navigation }) => {
     };
     fetchSpends();
     fetchCurrMoney();
-  }, []);
+  }, [statistic]);
 
   const getStatisticData = async (type) => {
     return fetch(`https://moneytrackerserver-production.up.railway.app/spends/statistic/${userId}?type=${type}`)
