@@ -408,7 +408,7 @@ const CreateSpendingScreen = ({ navigation }) => {
           <View style={styles.modal_background}>
             <View style={styles.modal_spending_type_container}>
               <View style={styles.modal_spending_type_header}>
-                <Text style={styles.modal_spending_type_header_text}>Danh mục chi tiêu hằng ngày</Text>
+                <Text style={styles.modal_spending_type_header_text}>Danh mục chi tiêu</Text>
                 <TouchableOpacity onPress={() => setModalSpendingType(false)}>
                   <Ionicons style={styles.btn_more_category_icon} name="close-outline" size={28} />
                 </TouchableOpacity>
@@ -616,7 +616,7 @@ const CreateSpendingScreen = ({ navigation }) => {
               </View>
               <View style={styles.line}></View>
               <View style={styles.new_friend_container}>
-                <Text style={styles.add_friend_text}>Tạo nhanh người nợ mới</Text>
+                <Text style={styles.add_friend_text}>Thêm bạn bè khác</Text>
                 <View style={styles.add_friend_input_container}>
                   <TextInput
                     style={styles.add_friend_text_input}

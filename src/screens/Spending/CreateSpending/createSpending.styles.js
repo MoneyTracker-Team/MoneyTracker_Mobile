@@ -191,9 +191,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   spending_type_img: {
-    padding: 16,
+    // padding: 16,
+    width: 40,
+    height: 40,
     borderRadius: 50,
     marginEnd: '8%',
+    flexShrink: 0,
   },
   spending_type_img_display: {
     paddingHorizontal: '7%',
