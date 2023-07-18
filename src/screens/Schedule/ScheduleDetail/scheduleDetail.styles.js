@@ -4,10 +4,9 @@ import theme from '../../../config/theme';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.black,
   },
   overview_container: {
-    marginTop: '4%',
+    marginTop: '2%',
     marginLeft: '6%',
   },
   overview_title_text: {
@@ -27,7 +26,7 @@ const styles = StyleSheet.create({
     color: theme.colors.tertiary,
   },
   one_day_spending_scrollview: {
-    paddingTop: '8%',
+    paddingTop: '1%',
   },
   date_scroll_view_container: {
     marginTop: '6%',

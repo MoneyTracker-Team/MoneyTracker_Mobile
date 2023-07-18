@@ -3,19 +3,18 @@ import theme from '../../config/theme';
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: '#000',
   },
   user_info_container: {
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
-    height: '33%',
-    backgroundColor: '#214c31',
+    height: '26%',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
   },
   image: {
     alignSelf: 'center',
-    width: 80,
-    height: 80,
+    width: 70,
+    height: 70,
     borderRadius: 50,
     marginTop: 10,
     marginBottom: 10,
@@ -31,12 +30,13 @@ const styles = StyleSheet.create({
     color: theme.colors.quaternary,
     alignSelf: 'center',
     marginTop: 4,
-    fontSize: theme.fontSizes.headline_one,
+    fontSize: theme.fontSizes.headline_two,
   },
   list_action: {
     display: 'flex',
     flexDirection: 'column',
-    height: '66%',
+    flex: 1,
+    justifyContent: 'space-between',
   },
   action: {
     marginTop: 6,

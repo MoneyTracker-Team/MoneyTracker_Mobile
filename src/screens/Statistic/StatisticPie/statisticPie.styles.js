@@ -1,8 +1,37 @@
 import { StyleSheet } from 'react-native';
+import theme from '../../../config/theme';
 
 const styles = StyleSheet.create({
-  example: {
-    color: '#000',
+  container: {
+    flex: 1,
+  },
+  statistic_container: {
+    flex: 1,
+    marginTop: '4%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  pie_chart_text: {
+    color: theme.colors.white,
+    fontSize: 20,
+  },
+  spending_type_container: {
+    height: '25%',
+    width: '100%',
+    backgroundColor: 'red',
+  },
+  select_month_container: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    marginBottom: 20,
+    paddingVertical: 15,
+    flexShrink: 0,
+  },
+  select_month_text: {
+    fontSize: theme.fontSizes.text_body,
+    color: theme.colors.white,
   },
 });
 

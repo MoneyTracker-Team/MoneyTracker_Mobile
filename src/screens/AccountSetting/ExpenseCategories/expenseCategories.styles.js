@@ -4,7 +4,6 @@ import theme from '../../../config/theme';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
     paddingHorizontal: 10,
     justifyContent: 'center',
     position: 'relative',
@@ -118,7 +117,7 @@ const styles = StyleSheet.create({
   },
   btnSaveCategory: {
     backgroundColor: theme.colors.quaternary,
-    width: Dimensions.get('window').width * 0.7,
+    width: Dimensions.get('window').width * 0.3,
     marginHorizontal: '8%',
     marginVertical: 0,
     height: 60,
@@ -166,7 +165,9 @@ const styles = StyleSheet.create({
     padding: 8,
     backgroundColor: 'rgba(255, 255, 255, 0.16)',
     borderRadius: 50,
-    // margin: '8%',
+  },
+  btnContainer: {
+    flexDirection: 'row',
   },
 });
 

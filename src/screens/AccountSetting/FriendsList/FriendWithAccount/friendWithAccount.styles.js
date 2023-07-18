@@ -3,7 +3,6 @@ import theme from '../../../../config/theme';
 const imageHeight = Dimensions.get('window').width * 0.12;
 const styles = StyleSheet.create({
   frienddata: {
-    backgroundColor: '#000',
     display: 'flex',
     flexDirection: 'row',
     marginVertical: '2%',

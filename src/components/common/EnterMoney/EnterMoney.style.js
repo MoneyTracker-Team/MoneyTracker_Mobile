@@ -5,7 +5,7 @@ import theme from '../../../config/theme';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginVertical: '67%',
+    marginVertical: '30%',
     marginHorizontal: '8%',
     paddingBottom: 28,
     backgroundColor: theme.colors.white,
@@ -33,11 +33,12 @@ const styles = StyleSheet.create({
   input_money: {
     marginTop: 10,
     marginHorizontal: 20,
-    paddingVertical: 15,
+    paddingVertical: 10,
     borderWidth: 1,
     borderColor: theme.colors.quaternary,
     borderRadius: 20,
     backgroundColor: 'rgba(217, 217, 217, 0.7)',
+    fontSize: theme.fontSizes.headline_two,
   },
   button_container: {
     flexDirection: 'row',

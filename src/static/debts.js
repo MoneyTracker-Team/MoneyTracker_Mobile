@@ -1,0 +1,58 @@
+const debts = [
+  {
+    name: 'Minh Huy',
+    avatar: 'https://gocnhintaichinh.com/wp-content/uploads/2021/06/vay-tien-online.jpg',
+    amount: 5000000,
+    timestamp: '2023-05-20T09:30:00Z',
+    note: 'Tiền mượn mua xe máy',
+    status: 'debt',
+    image: 'https://luathoangphi.vn/wp-content/uploads/2021/01/vay-muon-tien-khong-tra-phai-lam-sao-1.jpg',
+  },
+  {
+    name: 'Vinh Tran',
+    avatar: 'https://thuthuatnhanh.com/wp-content/uploads/2019/05/gai-xinh-toc-ngan-facebook.jpg',
+    amount: 100000,
+    timestamp: '2023-05-15T14:45:00Z',
+    note: 'Cho bạn mượn đóng học phí',
+    status: 'loan',
+    image: '',
+  },
+  {
+    name: 'Khoi Nguyen',
+    avatar: 'https://assets-prd.ignimgs.com/2022/08/17/top25animecharacters-blogroll-1660777571580.jpg',
+    amount: 2000000,
+    timestamp: '2023-05-10T18:20:00Z',
+    note: 'Mượn mua điện thoại',
+    status: 'debt',
+    image: 'https://vcdn-giadinh.vnecdn.net/2022/03/04/vay-tien-7212-1646365465.jpg',
+  },
+  {
+    name: 'Minh Nhat Tran',
+    avatar: 'https://assets-prd.ignimgs.com/2022/08/17/top25animecharacters-blogroll-1660777571580.jpg',
+    amount: 250000,
+    timestamp: '2023-07-20T09:30:00Z',
+    note: 'Tiền mượn ăn sáng',
+    status: 'loan',
+    image: 'https://vcdn-giadinh.vnecdn.net/2022/03/04/vay-tien-7212-1646365465.jpg',
+  },
+  {
+    name: 'Khải Vinh',
+    avatar: 'https://antimatter.vn/wp-content/uploads/2022/04/avatar-doi-nguoi-that-ngau-dep-cho-nam.jpg',
+    amount: 60000,
+    timestamp: '2022-12-15T14:45:00Z',
+    note: 'Mượn sửa xe',
+    status: 'loan',
+    image: 'https://vcdn-giadinh.vnecdn.net/2022/03/04/vay-tien-7212-1646365465.jpg',
+  },
+  {
+    name: 'Kim Dien Do',
+    avatar: 'https://chieuta.com/wp-content/uploads/2017/11/hinh-anh-nhung-co-gai-xinh-dep-de-thuong.jpg',
+    amount: 35000,
+    timestamp: '2022-01-10T18:20:00Z',
+    note: 'Chơi net thiếu tiền',
+    status: 'debt',
+    image: 'https://vcdn-giadinh.vnecdn.net/2022/03/04/vay-tien-7212-1646365465.jpg',
+  },
+];
+
+export default debts;

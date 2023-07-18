@@ -1,13 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, SafeAreaView, FlatList, Modal, TextInput, Keyboard } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  FlatList,
+  Modal,
+  TextInput,
+  Keyboard,
+  ImageBackground,
+  Alert,
+} from 'react-native';
 import styles from './expenseCategories.styles.js';
 import categories from '../../../static/categories.js';
 import ScreenTab from '../../../components/ScreenTab/ScreenTab.component.js';
-import { useNavigation } from '@react-navigation/native';
+import background from '../../../../assets/bg-img.png';
 import * as ImagePicker from 'expo-image-picker';
 import theme from '../../../config/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons.js';
+import { AuthContext } from '../../../context/AuthContext/AuthContext.js';
 function ExpenseCategoriesScreen({ navigation }) {
+  const userId = useContext(AuthContext).userId;
+  const [categoryData, setCategoryData] = useState([]);
+  const [base64Image, setBase64Image] = useState();
+  const [rerender, setRerender] = useState(true);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const url = `https://moneytrackerserver-production.up.railway.app/type-spends/all-of-user/${userId}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        setCategoryData(data.data.typeSpends);
+        setStatusFilter(status);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [rerender]);
   useEffect(() => {
     navigation.getParent().setOptions({ tabBarStyle: { display: 'none' } });
     return () => {
@@ -25,48 +55,207 @@ function ExpenseCategoriesScreen({ navigation }) {
     return (
       <View key={index} style={styles.itemContainer}>
         <View style={styles.itemLogo}>
-          <Image
-            style={styles.itemImage}
-            source={{
-              uri: item.image,
-            }}
-          />
+          {item.image && (
+            <Image
+              style={styles.itemImage}
+              source={{
+                uri: item.image,
+              }}
+            />
+          )}
         </View>
         <View style={styles.itemBody}>
           <Text style={styles.itemName}>{item.name}</Text>
         </View>
-        <Ionicons style={styles.action_icon} name="settings-outline" size={24} onPress={() => openModal(item)} />
+        <Ionicons
+          style={[styles.action_icon, { opacity: item.isDefault ? 0 : 1 }]}
+          name="settings-outline"
+          size={24}
+          onPress={() => openModal(item)}
+        />
       </View>
     );
   };
   const listTab = [
-    { status: 'daily', title: 'Hằng ngày' },
-    { status: 'monthly', title: 'Hằng tháng' },
+    { status: true, title: 'Hằng ngày' },
+    { status: false, title: 'Hằng tháng' },
   ];
-  const [status, setStatus] = useState('daily');
-  const [categoryList, setCategoryList] = useState([...categories.filter((category) => category.status === status)]);
+  const [status, setStatus] = useState(true);
+  const [categoryList, setCategoryList] = useState([...categoryData.filter((category) => category.isDaily === status)]);
   const setStatusFilter = (status) => {
-    setCategoryList([...categories.filter((category) => category.status === status)]);
+    setCategoryList([...categoryData.filter((category) => category.isDaily === status)]);
     setStatus(status);
   };
-
+  useEffect(() => {
+    setCategoryList([...categoryData.filter((category) => category.isDaily === status)]);
+  }, [categoryData]);
   const [showModal, setShowModal] = useState(false);
   const openModal = (item) => {
-    setSelectedItem(item);
-    if (item != null) {
-      setImage(item.image);
-      setInputValue(item.name);
+    if (item !== null) {
+      if (!item.isDefault) {
+        setSelectedItem(item);
+        setImage(item.image);
+        setInputValue(item.name);
+        setShowModal(true);
+      }
+    } else {
+      setImage(null);
+      setShowModal(true);
     }
-    setShowModal(true);
   };
-  const onSave = () => {
-    // Call API Save here
-    setShowModal(false);
+
+  const onDelete = async () => {
+    Alert.alert('Xác nhận xóa', 'Bạn có chắc chắn muốn xóa danh mục này không?', [
+      {
+        text: 'Hủy',
+        style: 'cancel',
+      },
+      {
+        text: 'Có',
+        onPress: async () =>
+          await fetch(`https://moneytrackerserver-production.up.railway.app/type-spends/delete/${selectedItem._id}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              setRerender(!rerender);
+              Alert.alert('Xóa danh mục chi tiêu thành công', '', [
+                {
+                  text: 'Ok',
+                  onPress: () => {
+                    setInputValue('');
+                    setShowModal(false);
+                  },
+                  style: 'cancel',
+                },
+              ]);
+            })
+            .catch((error) => {
+              console.error(error);
+            }),
+      },
+    ]);
+  };
+
+  const onSave = async () => {
+    if (selectedItem) {
+      if (base64Image) {
+        try {
+          const response = await fetch(
+            `https://moneytrackerserver-production.up.railway.app/type-spends/update/${selectedItem._id}`,
+            {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                name: inputValue,
+                image: base64Image,
+              }),
+            },
+          );
+          const data = await response.json();
+          setRerender(!rerender);
+          if (data.status === 200 || data.status === 201) {
+            setInputValue('');
+            setShowModal(false);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        try {
+          const response = await fetch(
+            `https://moneytrackerserver-production.up.railway.app/type-spends/update/${selectedItem._id}`,
+            {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                name: inputValue,
+              }),
+            },
+          );
+          const data = await response.json();
+          setRerender(!rerender);
+          if (data.status === 200 || data.status === 201) {
+            setInputValue('');
+            setShowModal(false);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    } else {
+      if (base64Image) {
+        try {
+          const response = await fetch(`https://moneytrackerserver-production.up.railway.app/type-spends/create`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              userId: userId,
+              name: inputValue,
+              image: base64Image,
+              isDaily: status,
+              isDefault: false,
+            }),
+          });
+          const data = await response.json();
+          setRerender(!rerender);
+          if (data.status === 200 || data.status === 201) {
+            setInputValue('');
+            setShowModal(false);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        try {
+          const response = await fetch(`https://moneytrackerserver-production.up.railway.app/type-spends/create`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              userId: userId,
+              name: inputValue,
+              isDaily: status,
+              isDefault: false,
+            }),
+          });
+          const data = await response.json();
+          setRerender(!rerender);
+          if (data.status === 200 || data.status === 201) {
+            setInputValue('');
+            setShowModal(false);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
   };
   const closeModal = () => {
+    setSelectedItem(null);
+    setImage(null);
+    setInputValue(null);
     setShowModal(false);
   };
   const [keyboardStatus, setKeyboardStatus] = useState('');
+
+  function getCharactersAfterLastDot(str) {
+    const lastDotIndex = str.lastIndexOf('.');
+    if (lastDotIndex !== -1 && lastDotIndex < str.length - 1) {
+      return str.substring(lastDotIndex + 1);
+    }
+    return '';
+  }
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
@@ -89,17 +278,17 @@ function ExpenseCategoriesScreen({ navigation }) {
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
+      base64: true,
     });
-
-    console.log(result);
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
+      const charactersAfterLastDot = getCharactersAfterLastDot(result.assets[0].uri);
+      setBase64Image('data:image/' + charactersAfterLastDot + ';base64,' + result.assets[0].base64);
     }
   };
-
   return (
-    <SafeAreaView style={styles.container}>
+    <ImageBackground source={background} style={styles.container}>
       <ScreenTab listTab={listTab} status={status} setStatusFilter={setStatusFilter} />
       <View
         style={{
@@ -110,8 +299,8 @@ function ExpenseCategoriesScreen({ navigation }) {
           marginStart: '8%',
         }}
       />
-      <FlatList data={categoryList} keyExtractor={(e, i) => i.toString()} renderItem={renderItem} />
-      <TouchableOpacity style={styles.btnAddNewCategory} onPress={openModal}>
+      {<FlatList data={categoryList} keyExtractor={(e, i) => i.toString()} renderItem={renderItem} />}
+      <TouchableOpacity style={styles.btnAddNewCategory} onPress={() => openModal(null)}>
         <Text style={styles.textAddNewCategory}>Thêm danh mục</Text>
       </TouchableOpacity>
       <Modal animationType="slide" transparent={true} visible={showModal}>
@@ -145,15 +334,19 @@ function ExpenseCategoriesScreen({ navigation }) {
                   <Image source={{ uri: image }} style={styles.image} />
                 </View>
               )}
-
-              <TouchableOpacity style={styles.btnSaveCategory} onPress={onSave}>
-                <Text style={styles.textAddNewCategory}>Lưu</Text>
-              </TouchableOpacity>
+              <View style={styles.btnContainer}>
+                <TouchableOpacity style={styles.btnSaveCategory} onPress={onDelete}>
+                  <Text style={styles.textAddNewCategory}>Xoá</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.btnSaveCategory} onPress={onSave}>
+                  <Text style={styles.textAddNewCategory}>Lưu</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
       </Modal>
-    </SafeAreaView>
+    </ImageBackground>
   );
 }
 
