@@ -6,6 +6,7 @@ import theme from '../../../config/theme';
 import background from '../../../../assets/bg-img.png';
 import PasswordInput from './PasswordInput/PasswordInput.jsx';
 import { AuthContext } from '../../../context/AuthContext/AuthContext.js';
+import { backend_url as baseUrl } from '../../../config/baseURL.js';
 
 function ChangePasswordScreen({ navigation }) {
   const userId = useContext(AuthContext).userId;
@@ -43,19 +44,16 @@ function ChangePasswordScreen({ navigation }) {
       //Call API  Check password here
       if (newPassword === confirmPassword && newPassword.length > 5) {
         try {
-          const response = await fetch(
-            `https://moneytrackerserver-production.up.railway.app/users/update-pass/${userId}`,
-            {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                oldPassword: currentPassword,
-                newPassword: newPassword,
-              }),
+          const response = await fetch(`${baseUrl}/users/update-pass/${userId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
             },
-          );
+            body: JSON.stringify({
+              oldPassword: currentPassword,
+              newPassword: newPassword,
+            }),
+          });
           const data = await response.json();
           if (data.status === 200 || data.status === 201) {
             setErrorMessage('');

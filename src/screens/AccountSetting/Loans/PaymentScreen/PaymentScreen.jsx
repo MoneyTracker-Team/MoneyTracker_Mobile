@@ -7,6 +7,8 @@ import styles from './paymentScreen.styles.js';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { AuthContext } from '../../../../context/AuthContext/AuthContext';
 import formatNumber from '../../../../utils/formatNumber';
+import { backend_url as baseUrl } from '../../../../config/baseURL.js';
+
 const PaymentScreen = ({ navigation, route }) => {
   const userId = useContext(AuthContext).userId;
   const [debtAccountData, setDebtAccountData] = useState({});
@@ -17,7 +19,7 @@ const PaymentScreen = ({ navigation, route }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url = `https://moneytrackerserver-production.up.railway.app/loans/checkout-debtor/${userId}?debtorId=${debtAccountId}`;
+        const url = `${baseUrl}/loans/checkout-debtor/${userId}?debtorId=${debtAccountId}`;
         const response = await fetch(url);
         const data = await response.json();
         setDebtAccountData(data.data);
@@ -44,15 +46,12 @@ const PaymentScreen = ({ navigation, route }) => {
 
   const onPayment = async () => {
     try {
-      const response = await fetch(
-        `https://moneytrackerserver-production.up.railway.app/loans/checkout/${userId}?debtorId=${debtAccountId}`,
-        {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+      const response = await fetch(`${baseUrl}/loans/checkout/${userId}?debtorId=${debtAccountId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
+      });
       const data = await response.json();
       setRerender(!rerender);
       navigation.navigate('Loans');

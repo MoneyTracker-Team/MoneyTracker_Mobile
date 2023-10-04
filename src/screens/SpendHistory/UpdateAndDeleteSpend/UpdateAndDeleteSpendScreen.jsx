@@ -24,6 +24,8 @@ import theme from '../../../config/theme';
 import background from '../../../../assets/bg-img.png';
 import { AuthContext } from '../../../context/AuthContext/AuthContext';
 import formatNumber from '../../../utils/formatNumber';
+import { backend_url as baseUrl } from '../../../config/baseURL.js';
+
 const UpdateAndDeleteSpend = ({ navigation, route }) => {
   const userId = useContext(AuthContext).userId;
   const { spendId, rerender, setRerender } = route.params;
@@ -39,29 +41,23 @@ const UpdateAndDeleteSpend = ({ navigation, route }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response1 = await fetch(
-          `https://moneytrackerserver-production.up.railway.app/type-spends/all-of-user/${userId}`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+        const response1 = await fetch(`${baseUrl}/type-spends/all-of-user/${userId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        );
+        });
         const data = await response1.json();
         setListSpendingType(data.data.typeSpends);
-        const response2 = await fetch(
-          `https://moneytrackerserver-production.up.railway.app/friends/all-of-user/${userId}`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+        const response2 = await fetch(`${baseUrl}/friends/all-of-user/${userId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        );
+        });
         const data2 = await response2.json();
         setListFriend(data2.data.friends);
-        const response3 = await fetch(`https://moneytrackerserver-production.up.railway.app/spends/${spendId}`, {
+        const response3 = await fetch(`${baseUrl}/spends/${spendId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -262,7 +258,7 @@ const UpdateAndDeleteSpend = ({ navigation, route }) => {
       {
         text: 'Có',
         onPress: async () =>
-          await fetch(`https://moneytrackerserver-production.up.railway.app/spends/delete/${spendId}`, {
+          await fetch(`${baseUrl}/spends/delete/${spendId}`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
@@ -329,7 +325,7 @@ const UpdateAndDeleteSpend = ({ navigation, route }) => {
         {
           text: 'Có',
           onPress: async () =>
-            await fetch(`https://moneytrackerserver-production.up.railway.app/spends/update/${spendId}`, {
+            await fetch(`${baseUrl}/spends/update/${spendId}`, {
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json',

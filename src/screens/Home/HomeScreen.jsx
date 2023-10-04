@@ -9,6 +9,7 @@ import formatNumber from '../../utils/formatNumber.js';
 // chart
 import { LineChart } from 'react-native-chart-kit';
 import { AuthContext } from '../../context/AuthContext/AuthContext.js';
+import { backend_url as baseUrl } from '../../config/baseURL.js';
 
 const HomeScreen = ({ navigation }) => {
   const userId = useContext(AuthContext).userId;
@@ -25,9 +26,7 @@ const HomeScreen = ({ navigation }) => {
       const month = currDate.getMonth() + 1;
       const year = currDate.getFullYear();
 
-      fetch(
-        `https://moneytrackerserver-production.up.railway.app/spends/in-date/${userId}?day=${day}&month=${month}&year=${year}`,
-      )
+      fetch(`${baseUrl}/spends/in-date/${userId}?day=${day}&month=${month}&year=${year}`)
         .then((response) => response.json())
         .then((result) => {
           //* set data to state
@@ -38,7 +37,7 @@ const HomeScreen = ({ navigation }) => {
         });
     };
     const fetchCurrMoney = async () => {
-      fetch(`https://moneytrackerserver-production.up.railway.app/users/${userId}`)
+      fetch(`${baseUrl}/users/${userId}`)
         .then((response) => response.json())
         .then((result) => {
           //* set data to state
@@ -53,7 +52,7 @@ const HomeScreen = ({ navigation }) => {
   }, [statistic]);
 
   const getStatisticData = async (type) => {
-    return fetch(`https://moneytrackerserver-production.up.railway.app/spends/statistic/${userId}?type=${type}`)
+    return fetch(`${baseUrl}/spends/statistic/${userId}?type=${type}`)
       .then((response) => response.json())
       .then((result) => {
         return result.data;

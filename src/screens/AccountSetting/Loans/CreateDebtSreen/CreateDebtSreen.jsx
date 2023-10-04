@@ -23,6 +23,8 @@ import EditMoney from '../../../../components/common/EditMoney/EditMoney.compone
 import theme from '../../../../config/theme.js';
 import background from '../../../../../assets/bg-img.png';
 import { AuthContext } from '../../../../context/AuthContext/AuthContext.js';
+import { backend_url as baseUrl } from '../../../../config/baseURL.js';
+
 const CreateDebtScreen = ({ navigation, route }) => {
   const userId = useContext(AuthContext).userId;
   const { status, rerender, setRerender } = route.params;
@@ -39,15 +41,12 @@ const CreateDebtScreen = ({ navigation, route }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response2 = await fetch(
-          `https://moneytrackerserver-production.up.railway.app/friends/all-of-user/${userId}`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+        const response2 = await fetch(`${baseUrl}/friends/all-of-user/${userId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        );
+        });
         const data2 = await response2.json();
         setListFriend(data2.data.friends);
       } catch (error) {
@@ -240,7 +239,7 @@ const CreateDebtScreen = ({ navigation, route }) => {
           {
             text: 'Có',
             onPress: async () =>
-              await fetch('https://moneytrackerserver-production.up.railway.app/loans/create', {
+              await fetch(`${baseUrl}/loans/create`, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',

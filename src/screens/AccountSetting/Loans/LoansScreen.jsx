@@ -8,6 +8,8 @@ import DebtItem from './DebtItem/DebtItem.jsx';
 import DebtAccountItem from './DebtAccountItem/DebtAccountItem.jsx';
 import { AuthContext } from '../../../context/AuthContext/AuthContext.js';
 import formatNumber from '../../../utils/formatNumber.js';
+import { backend_url as baseUrl } from '../../../config/baseURL.js';
+
 function LoansScreen({ navigation }) {
   const userId = useContext(AuthContext).userId;
   const [rerender, setRerender] = useState(true);
@@ -24,7 +26,7 @@ function LoansScreen({ navigation }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url1 = `https://moneytrackerserver-production.up.railway.app/loans/all-of-user/${userId}`;
+        const url1 = `${baseUrl}/loans/all-of-user/${userId}`;
         const response1 = await fetch(url1);
         const data1 = await response1.json();
         setLoanData(data1.data);
@@ -41,7 +43,7 @@ function LoansScreen({ navigation }) {
         );
         setTotalDebts(totals.totalDebt);
         setTotalLoans(totals.totalLending);
-        const url2 = `https://moneytrackerserver-production.up.railway.app/loans/group-by-debtor/${userId}`;
+        const url2 = `${baseUrl}/loans/group-by-debtor/${userId}`;
         const response2 = await fetch(url2);
         const data2 = await response2.json();
         setAccountDetbData(data2.data);

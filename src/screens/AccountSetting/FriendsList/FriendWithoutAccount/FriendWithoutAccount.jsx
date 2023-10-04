@@ -4,6 +4,7 @@ import styles from './friendWithoutAccount.styles.js';
 import Ionicons from 'react-native-vector-icons/Ionicons.js';
 import theme from '../../../../config/theme.js';
 import * as ImagePicker from 'expo-image-picker';
+import { backend_url as baseUrl } from '../../../../config/baseURL.js';
 
 function FriendWithoutAccount({ data, rerender, setRerender }) {
   const [base64Image, setBase64Image] = useState('');
@@ -55,7 +56,7 @@ function FriendWithoutAccount({ data, rerender, setRerender }) {
     if (inputValue !== '') {
       if (base64Image) {
         try {
-          const response = await fetch(`https://moneytrackerserver-production.up.railway.app/friends/update/${id}`, {
+          const response = await fetch(`${baseUrl}/friends/update/${id}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -73,7 +74,7 @@ function FriendWithoutAccount({ data, rerender, setRerender }) {
         }
       } else {
         try {
-          const response = await fetch(`https://moneytrackerserver-production.up.railway.app/friends/update/${id}`, {
+          const response = await fetch(`${baseUrl}/friends/update/${id}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -114,7 +115,7 @@ function FriendWithoutAccount({ data, rerender, setRerender }) {
   };
   const deleteFriend = async (id) => {
     try {
-      const response = await fetch(`https://moneytrackerserver-production.up.railway.app/friends/delete/${id}`, {
+      const response = await fetch(`${baseUrl}/friends/delete/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

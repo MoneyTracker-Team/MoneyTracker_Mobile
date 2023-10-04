@@ -10,6 +10,7 @@ import { AuthContext } from '../../../context/AuthContext/AuthContext.js';
 // import icon
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons.js';
+import { backend_url as baseUrl } from '../../../config/baseURL.js';
 
 const dayOfWeeks = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'CN'];
 // ex: 2023-07-08 -> 08-07-2023
@@ -45,11 +46,7 @@ function CalendarScreen({ navigation }) {
   //* fetch data
   useEffect(() => {
     const fetchDataInMonth = async () => {
-      fetch(
-        `https://moneytrackerserver-production.up.railway.app/spends/in-month/${userId}?month=${
-          currMonth + 1
-        }&year=${currYear}`,
-      )
+      fetch(`${baseUrl}/spends/in-month/${userId}?month=${currMonth + 1}&year=${currYear}`)
         .then((response) => response.json())
         .then((data) => {
           //* set data to state
@@ -156,9 +153,7 @@ function CalendarScreen({ navigation }) {
   };
 
   const fetchSpendInDate = async (day, month, year) => {
-    return fetch(
-      `https://moneytrackerserver-production.up.railway.app/spends/in-date/${userId}?day=${day}&month=${month}&year=${year}`,
-    )
+    return fetch(`${baseUrl}/spends/in-date/${userId}?day=${day}&month=${month}&year=${year}`)
       .then((response) => response.json())
       .then((result) => {
         return result.data;

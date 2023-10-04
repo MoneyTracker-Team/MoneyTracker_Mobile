@@ -10,6 +10,8 @@ import background from '../../../../assets/bg-img.png';
 import { MaterialIcons } from '@expo/vector-icons';
 import formatNumber from '../../../utils/formatNumber.js';
 import { AuthContext } from '../../../context/AuthContext/AuthContext.js';
+import { backend_url as baseUrl } from '../../../config/baseURL.js';
+
 const SpendScheduleScreen = ({ navigation }) => {
   const userId = useContext(AuthContext).userId;
 
@@ -30,7 +32,7 @@ const SpendScheduleScreen = ({ navigation }) => {
 
   useEffect(() => {
     fetch(
-      `https://moneytrackerserver-production.up.railway.app/spends/schedule-in-month/${userId}?month=${
+      `${baseUrl}/spends/schedule-in-month/${userId}?month=${
         currentMonth.getMonth() + 1
       }&year=${currentMonth.getFullYear()}`,
     )
@@ -48,16 +50,13 @@ const SpendScheduleScreen = ({ navigation }) => {
       const updatedScheduleMoney = {
         moneyAdjust: scheduleMoney,
       };
-      fetch(
-        `https://moneytrackerserver-production.up.railway.app/schedules/adjust-money/${currentSchedule.scheduleId}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(updatedScheduleMoney),
+      fetch(`${baseUrl}/schedules/adjust-money/${currentSchedule.scheduleId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      )
+        body: JSON.stringify(updatedScheduleMoney),
+      })
         .then((response) => response.json())
         .then((data) => {
           if (data.data !== undefined) {
@@ -110,7 +109,7 @@ const SpendScheduleScreen = ({ navigation }) => {
           year: currentMonth.getFullYear(),
           scheduleMoney,
         };
-        await fetch('https://moneytrackerserver-production.up.railway.app/schedules/create', {
+        await fetch(`${baseUrl}/schedules/create`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

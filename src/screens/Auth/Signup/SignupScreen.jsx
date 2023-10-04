@@ -6,6 +6,7 @@ import background from '../../../../assets/bg-img.png';
 import logo from '../../../../assets/money_tracking_logo.png';
 import Ionicons from 'react-native-vector-icons/Ionicons.js';
 import { AuthContext } from '../../../context/AuthContext/AuthContext.js';
+import { backend_url as baseUrl } from '../../../config/baseURL.js';
 
 const SignupScreen = ({ navigation }) => {
   const { login } = useContext(AuthContext);
@@ -23,7 +24,7 @@ const SignupScreen = ({ navigation }) => {
       setErrorMessage('Đăng ký thất bại!');
     } else {
       try {
-        const response = await fetch('https://moneytrackerserver-production.up.railway.app/auth/register', {
+        const response = await fetch(`${baseUrl}/auth/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -35,6 +36,7 @@ const SignupScreen = ({ navigation }) => {
           }),
         });
         const data = await response.json();
+        console.log('data: ', data);
         if (data.status === 200 || data.status === 201) {
           login(data.data.newAccount._id);
           navigation.navigate('app');

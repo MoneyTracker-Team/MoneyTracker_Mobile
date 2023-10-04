@@ -6,6 +6,8 @@ import background from '../../../../assets/bg-img.png';
 import logo from '../../../../assets/money_tracking_logo.png';
 import Ionicons from 'react-native-vector-icons/Ionicons.js';
 import { AuthContext } from '../../../context/AuthContext/AuthContext.js';
+import { backend_url as baseUrl } from '../../../config/baseURL.js';
+
 const LoginScreen = ({ navigation }) => {
   const { login } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState('');
@@ -17,7 +19,8 @@ const LoginScreen = ({ navigation }) => {
   };
   const handleLogin = async () => {
     try {
-      const response = await fetch('https://moneytrackerserver-production.up.railway.app/auth/login', {
+      console.log(`${baseUrl}/auth/login`);
+      const response = await fetch(`${baseUrl}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

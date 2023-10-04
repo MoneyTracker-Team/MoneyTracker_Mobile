@@ -5,6 +5,8 @@ import theme from '../../../../config/theme.js';
 import { useRoute } from '@react-navigation/native';
 import styles from './debtDetailScreen.styles';
 import formatNumber from '../../../../utils/formatNumber';
+import { backend_url as baseUrl } from '../../../../config/baseURL.js';
+
 const DebtDetailScreen = ({ navigation }) => {
   const route = useRoute();
   const { debtId, rerender, setRerender } = route.params;
@@ -36,7 +38,7 @@ const DebtDetailScreen = ({ navigation }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url = `https://moneytrackerserver-production.up.railway.app/loans/${debtId}`;
+        const url = `${baseUrl}/loans/${debtId}`;
         const response = await fetch(url);
         const data = await response.json();
         setDebtDetailData(data.data[0]);

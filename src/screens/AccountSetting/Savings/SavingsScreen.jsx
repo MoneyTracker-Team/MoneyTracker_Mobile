@@ -8,6 +8,8 @@ import DisplayMoney from '../../../components/common/DisplayMoney/DisplayMoney.c
 import moment from 'moment';
 import { AuthContext } from '../../../context/AuthContext/AuthContext.js';
 import formatNumber from '../../../utils/formatNumber.js';
+import { backend_url as baseUrl } from '../../../config/baseURL.js';
+
 function SavingsScreen({ navigation }) {
   const userId = useContext(AuthContext).userId;
   const [currentMoney, setCurrentMoney] = useState(0);
@@ -20,7 +22,7 @@ function SavingsScreen({ navigation }) {
     navigation.getParent().setOptions({ tabBarStyle: { display: 'none' } });
     const fetchData = async () => {
       try {
-        const url = `https://moneytrackerserver-production.up.railway.app/adjust-moneys/all-of-user/${userId}`;
+        const url = `${baseUrl}/adjust-moneys/all-of-user/${userId}`;
         const response = await fetch(url);
         const data = await response.json();
         setCurrentMoney(data.data.currentMoney.currentMoney);
@@ -41,7 +43,7 @@ function SavingsScreen({ navigation }) {
       const updatedScheduleMoney = {
         displace: scheduleMoney,
       };
-      fetch(`https://moneytrackerserver-production.up.railway.app/users/update-current-money/${userId}`, {
+      fetch(`${baseUrl}/users/update-current-money/${userId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

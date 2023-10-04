@@ -3,13 +3,14 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styles from './AccountItem.style.js';
 import Ionicons from 'react-native-vector-icons/Ionicons.js';
 import { AuthContext } from '../../context/AuthContext/AuthContext.js';
+import { backend_url as baseUrl } from '../../config/baseURL.js';
 
 function AccountItem({ data, rerender, setRerender, setShowAddFriendWithAccountModal }) {
   const userId = useContext(AuthContext).userId;
   const userData = data;
   const add = async () => {
     try {
-      const response = await fetch(`https://moneytrackerserver-production.up.railway.app/friends/create/${userId}`, {
+      const response = await fetch(`${baseUrl}/friends/create/${userId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

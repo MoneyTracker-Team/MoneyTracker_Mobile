@@ -19,6 +19,7 @@ import AccountItem from '../../../components/AccountItem/AccountItem.component.j
 import Ionicons from 'react-native-vector-icons/Ionicons.js';
 import { AuthContext } from '../../../context/AuthContext/AuthContext';
 import * as ImagePicker from 'expo-image-picker';
+import { backend_url as baseUrl } from '../../../config/baseURL.js';
 
 function FriendsListScreen({ navigation }) {
   const userId = useContext(AuthContext).userId;
@@ -50,7 +51,7 @@ function FriendsListScreen({ navigation }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url = `https://moneytrackerserver-production.up.railway.app/friends/all-of-user/${userId}`;
+        const url = `${baseUrl}/friends/all-of-user/${userId}`;
         const response = await fetch(url);
         const data = await response.json();
         setFriendData(data.data.friends);
@@ -127,20 +128,17 @@ function FriendsListScreen({ navigation }) {
     if (inputValue !== '') {
       if (base64Image) {
         try {
-          const response = await fetch(
-            `https://moneytrackerserver-production.up.railway.app/friends/create/${userId}`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                isTemporaty: false,
-                name: inputValue,
-                image: base64Image,
-              }),
+          const response = await fetch(`${baseUrl}/friends/create/${userId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
             },
-          );
+            body: JSON.stringify({
+              isTemporaty: false,
+              name: inputValue,
+              image: base64Image,
+            }),
+          });
           const data = await response.json();
           setRerender(!rerender);
           setShowModal(false);
@@ -149,19 +147,16 @@ function FriendsListScreen({ navigation }) {
         }
       } else {
         try {
-          const response = await fetch(
-            `https://moneytrackerserver-production.up.railway.app/friends/create/${userId}`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                isTemporaty: false,
-                name: inputValue,
-              }),
+          const response = await fetch(`${baseUrl}/friends/create/${userId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
             },
-          );
+            body: JSON.stringify({
+              isTemporaty: false,
+              name: inputValue,
+            }),
+          });
           const data = await response.json();
           setRerender(!rerender);
           setShowModal(false);
@@ -194,7 +189,7 @@ function FriendsListScreen({ navigation }) {
   const addFriendWithAccount = () => {
     const fetchData1 = async () => {
       try {
-        const url = `https://moneytrackerserver-production.up.railway.app/users/user-not-friend/${userId}`;
+        const url = `${baseUrl}/users/user-not-friend/${userId}`;
         const response = await fetch(url);
         const data = await response.json();
         setNotFriendList(data.data);

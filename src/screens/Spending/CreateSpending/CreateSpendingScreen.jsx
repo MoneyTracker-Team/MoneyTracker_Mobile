@@ -23,6 +23,8 @@ import EditMoney from '../../../components/common/EditMoney/EditMoney.component.
 import theme from '../../../config/theme.js';
 import background from '../../../../assets/bg-img.png';
 import { AuthContext } from '../../../context/AuthContext/AuthContext.js';
+import { backend_url as baseUrl } from '../../../config/baseURL.js';
+
 const CreateSpendingScreen = ({ navigation }) => {
   const userId = useContext(AuthContext).userId;
 
@@ -40,27 +42,21 @@ const CreateSpendingScreen = ({ navigation }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response1 = await fetch(
-          `https://moneytrackerserver-production.up.railway.app/type-spends/all-of-user/${userId}`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+        const response1 = await fetch(`${baseUrl}/type-spends/all-of-user/${userId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        );
+        });
         const data = await response1.json();
         setListSpendingType(data.data.typeSpends);
 
-        const response2 = await fetch(
-          `https://moneytrackerserver-production.up.railway.app/friends/all-of-user/${userId}`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+        const response2 = await fetch(`${baseUrl}/friends/all-of-user/${userId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        );
+        });
         const data2 = await response2.json();
         setListFriend(data2.data.friends);
       } catch (error) {
@@ -279,7 +275,7 @@ const CreateSpendingScreen = ({ navigation }) => {
         {
           text: 'Có',
           onPress: async () =>
-            await fetch('https://moneytrackerserver-production.up.railway.app/spends/create', {
+            await fetch('${baseUrl}/spends/create', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',

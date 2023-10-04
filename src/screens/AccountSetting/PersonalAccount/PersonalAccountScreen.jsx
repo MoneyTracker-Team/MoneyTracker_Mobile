@@ -6,6 +6,7 @@ import background from '../../../../assets/bg-img.png';
 import Ionicons from 'react-native-vector-icons/Ionicons.js';
 import * as ImagePicker from 'expo-image-picker';
 import { AuthContext } from '../../../context/AuthContext/AuthContext.js';
+import { backend_url as baseUrl } from '../../../config/baseURL.js';
 
 function PersonalAccountScreen({ navigation, route }) {
   const { rerender, setRerender } = route.params;
@@ -16,7 +17,7 @@ function PersonalAccountScreen({ navigation, route }) {
     setUserData({});
     const fetchData = async () => {
       try {
-        const url = `https://moneytrackerserver-production.up.railway.app/users/${userId}`;
+        const url = `${baseUrl}/users/${userId}`;
         const response = await fetch(url);
         const data = await response.json();
         setUserData(data.data);
@@ -66,7 +67,7 @@ function PersonalAccountScreen({ navigation, route }) {
     }
   };
   const handleUpdateAvatar = (base64) => {
-    fetch(`https://moneytrackerserver-production.up.railway.app/users/update/${userId}`, {
+    fetch(`${baseUrl}/users/update/${userId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

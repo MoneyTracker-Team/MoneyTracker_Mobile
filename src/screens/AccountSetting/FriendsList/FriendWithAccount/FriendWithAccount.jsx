@@ -2,10 +2,12 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styles from './friendWithAccount.styles.js';
 import Ionicons from 'react-native-vector-icons/Ionicons.js';
+import { backend_url as baseUrl } from '../../../../config/baseURL.js';
+
 function FriendWithAccount({ data, rerender, setRerender }) {
   const deleteFriend = async (id) => {
     try {
-      const response = await fetch(`https://moneytrackerserver-production.up.railway.app/friends/delete/${id}`, {
+      const response = await fetch(`${baseUrl}/friends/delete/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

@@ -24,6 +24,8 @@ import theme from '../../../../config/theme';
 import background from '../../../../../assets/bg-img.png';
 import { AuthContext } from '../../../../context/AuthContext/AuthContext';
 import formatNumber from '../../../../utils/formatNumber';
+import { backend_url as baseUrl } from '../../../../config/baseURL.js';
+
 const EditDebtScreen = ({ navigation, route }) => {
   const userId = useContext(AuthContext).userId;
   const { debtId, rerender, setRerender } = route.params;
@@ -38,18 +40,15 @@ const EditDebtScreen = ({ navigation, route }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response2 = await fetch(
-          `https://moneytrackerserver-production.up.railway.app/friends/all-of-user/${userId}`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+        const response2 = await fetch(`${baseUrl}/friends/all-of-user/${userId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        );
+        });
         const data2 = await response2.json();
         setListFriend(data2.data.friends);
-        const response3 = await fetch(`https://moneytrackerserver-production.up.railway.app/loans/${debtId}`, {
+        const response3 = await fetch(`${baseUrl}/loans/${debtId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -216,7 +215,7 @@ const EditDebtScreen = ({ navigation, route }) => {
       {
         text: 'Có',
         onPress: async () =>
-          await fetch(`https://moneytrackerserver-production.up.railway.app/loans/delete/${debtId}`, {
+          await fetch(`${baseUrl}/loans/delete/${debtId}`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
@@ -284,7 +283,7 @@ const EditDebtScreen = ({ navigation, route }) => {
         {
           text: 'Có',
           onPress: async () =>
-            await fetch(`https://moneytrackerserver-production.up.railway.app/loans/update/${debtId}`, {
+            await fetch(`${baseUrl}/loans/update/${debtId}`, {
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json',

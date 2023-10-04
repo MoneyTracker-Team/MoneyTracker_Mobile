@@ -8,6 +8,7 @@ import { BarChart, PieChart } from 'react-native-chart-kit';
 import background from '../../../../assets/bg-img.png';
 import theme from '../../../config/theme.js';
 import { AuthContext } from '../../../context/AuthContext/AuthContext.js';
+import { backend_url as baseUrl } from '../../../config/baseURL.js';
 
 const StatisticPieScreen = ({ navigation }) => {
   const userId = useContext(AuthContext).userId;
@@ -39,7 +40,7 @@ const StatisticPieScreen = ({ navigation }) => {
     const fetchData = async () => {
       try {
         const response1 = await fetch(
-          `https://moneytrackerserver-production.up.railway.app/spends/pie-chart/${userId}?month=${
+          `${baseUrl}/spends/pie-chart/${userId}?month=${
             currentMonth.getMonth() + 1
           }&year=${currentMonth.getFullYear()}`,
           {
@@ -53,7 +54,7 @@ const StatisticPieScreen = ({ navigation }) => {
         setListSpendingTypeSpend(data.data);
 
         const response2 = await fetch(
-          `https://moneytrackerserver-production.up.railway.app/spends/schedule-in-month/${userId}?month=${
+          `${baseUrl}/spends/schedule-in-month/${userId}?month=${
             currentMonth.getMonth() + 1
           }&year=${currentMonth.getFullYear()}`,
           {

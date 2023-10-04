@@ -19,6 +19,8 @@ import * as ImagePicker from 'expo-image-picker';
 import theme from '../../../config/theme';
 import Ionicons from 'react-native-vector-icons/Ionicons.js';
 import { AuthContext } from '../../../context/AuthContext/AuthContext.js';
+import { backend_url as baseUrl } from '../../../config/baseURL.js';
+
 function ExpenseCategoriesScreen({ navigation }) {
   const userId = useContext(AuthContext).userId;
   const [categoryData, setCategoryData] = useState([]);
@@ -27,7 +29,7 @@ function ExpenseCategoriesScreen({ navigation }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url = `https://moneytrackerserver-production.up.railway.app/type-spends/all-of-user/${userId}`;
+        const url = `${baseUrl}/type-spends/all-of-user/${userId}`;
         const response = await fetch(url);
         const data = await response.json();
         setCategoryData(data.data.typeSpends);
@@ -113,7 +115,7 @@ function ExpenseCategoriesScreen({ navigation }) {
       {
         text: 'Có',
         onPress: async () =>
-          await fetch(`https://moneytrackerserver-production.up.railway.app/type-spends/delete/${selectedItem._id}`, {
+          await fetch(`${baseUrl}/type-spends/delete/${selectedItem._id}`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
@@ -144,19 +146,16 @@ function ExpenseCategoriesScreen({ navigation }) {
     if (selectedItem) {
       if (base64Image) {
         try {
-          const response = await fetch(
-            `https://moneytrackerserver-production.up.railway.app/type-spends/update/${selectedItem._id}`,
-            {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                name: inputValue,
-                image: base64Image,
-              }),
+          const response = await fetch(`${baseUrl}/type-spends/update/${selectedItem._id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
             },
-          );
+            body: JSON.stringify({
+              name: inputValue,
+              image: base64Image,
+            }),
+          });
           const data = await response.json();
           setRerender(!rerender);
           if (data.status === 200 || data.status === 201) {
@@ -168,18 +167,15 @@ function ExpenseCategoriesScreen({ navigation }) {
         }
       } else {
         try {
-          const response = await fetch(
-            `https://moneytrackerserver-production.up.railway.app/type-spends/update/${selectedItem._id}`,
-            {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                name: inputValue,
-              }),
+          const response = await fetch(`${baseUrl}/type-spends/update/${selectedItem._id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
             },
-          );
+            body: JSON.stringify({
+              name: inputValue,
+            }),
+          });
           const data = await response.json();
           setRerender(!rerender);
           if (data.status === 200 || data.status === 201) {
@@ -193,7 +189,7 @@ function ExpenseCategoriesScreen({ navigation }) {
     } else {
       if (base64Image) {
         try {
-          const response = await fetch(`https://moneytrackerserver-production.up.railway.app/type-spends/create`, {
+          const response = await fetch(`${baseUrl}/type-spends/create`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -217,7 +213,7 @@ function ExpenseCategoriesScreen({ navigation }) {
         }
       } else {
         try {
-          const response = await fetch(`https://moneytrackerserver-production.up.railway.app/type-spends/create`, {
+          const response = await fetch(`${baseUrl}/type-spends/create`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

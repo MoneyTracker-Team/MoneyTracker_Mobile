@@ -5,6 +5,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons.js';
 import background from '../../../assets/bg-img.png';
 import { AuthContext } from '../../context/AuthContext/AuthContext.js';
 import formatNumber from '../../utils/formatNumber.js';
+import { backend_url as baseUrl } from '../../config/baseURL.js';
+
 const AccountSettingScreen = ({ navigation }) => {
   const userId = useContext(AuthContext).userId;
   const logout = useContext(AuthContext).logout;
@@ -48,7 +50,7 @@ const AccountSettingScreen = ({ navigation }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url = `https://moneytrackerserver-production.up.railway.app/users/${userId}`;
+        const url = `${baseUrl}/users/${userId}`;
         const response = await fetch(url);
         const data = await response.json();
         setUserData(data.data);

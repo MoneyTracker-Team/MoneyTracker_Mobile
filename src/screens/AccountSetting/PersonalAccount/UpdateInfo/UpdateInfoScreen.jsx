@@ -8,6 +8,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment/moment.js';
 import theme from '../../../../config/theme';
 import { AuthContext } from '../../../../context/AuthContext/AuthContext.js';
+import { backend_url as baseUrl } from '../../../../config/baseURL.js';
 
 function UpdateInfoScreen({ navigation, route }) {
   const userId = useContext(AuthContext).userId;
@@ -46,7 +47,7 @@ function UpdateInfoScreen({ navigation, route }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const url = `https://moneytrackerserver-production.up.railway.app/users/${userId}`;
+        const url = `${baseUrl}/users/${userId}`;
         const response = await fetch(url);
         const data = await response.json();
         setFullName(data.data.name);
@@ -78,7 +79,7 @@ function UpdateInfoScreen({ navigation, route }) {
   }, [fullName, slogan, dateOfBirth, selectedGender]);
   const onSave = () => {
     if (formReady) {
-      fetch(`https://moneytrackerserver-production.up.railway.app/users/update/${userId}`, {
+      fetch(`${baseUrl}/users/update/${userId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
