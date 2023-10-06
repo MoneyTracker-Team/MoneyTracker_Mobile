@@ -275,7 +275,7 @@ const CreateSpendingScreen = ({ navigation }) => {
         {
           text: 'Có',
           onPress: async () =>
-            await fetch('${baseUrl}/spends/create', {
+            await fetch(`${baseUrl}/spends/create`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
